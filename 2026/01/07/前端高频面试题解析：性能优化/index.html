@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+
+
+<html theme="dark" showBanner="true" hasBanner="true" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+
+  
+  <title>前端高频面试题解析：性能优化 | 个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="前端高频面试题解析：性能优化一、前端性能优化指标题目：请解释 Core Web Vitals（核心 Web 指标），以及如何优化这些指标。 答案：Core Web Vitals 是 Google 提出的衡量用户体验的关键指标，包括 LCP、FID 和 CLS。 解题思路：  LCP (Largest Contentful Paint)：最大内容绘制，衡量首屏加载速度 FID (First Inpu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端高频面试题解析：性能优化">
+<meta property="og:url" content="https://mangguo68.github.io/2026/01/07/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="个人博客">
+<meta property="og:description" content="前端高频面试题解析：性能优化一、前端性能优化指标题目：请解释 Core Web Vitals（核心 Web 指标），以及如何优化这些指标。 答案：Core Web Vitals 是 Google 提出的衡量用户体验的关键指标，包括 LCP、FID 和 CLS。 解题思路：  LCP (Largest Contentful Paint)：最大内容绘制，衡量首屏加载速度 FID (First Inpu">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-20T10:16:14.952Z">
+<meta property="article:author" content="mangguo">
+<meta property="article:tag" content="Core Web Vitals">
+<meta property="article:tag" content="性能优化">
+<meta property="article:tag" content="构建优化">
+<meta property="article:tag" content="面试题">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/images/1.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文档</a>
+    
+      <a class="main-nav-link" href="/about">关于</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文档</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/images/cdf58dc918fb56bfd0dacf18ec944465.webp></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">mangguo </div>
+      <div class="dot"></div>
+      <div class="subtitle">一名前端开发者 </div>
+      <div class="link-list">
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://twitter.com" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://store.steampowered.com" title="Steam"><i class="fa-brands fa-steam"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/mangguo68" title="GitHub"><i class="fa-brands fa-github"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+  <div class="sticky">
+    
+      
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/">
+                框架进阶
+                <div class="category-count">4</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Vue3/">
+                Vue3
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/React/">
+                React
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Nuxt/">
+                Nuxt
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Nuxt/Vue/">
+                Vue
+                <div class="category-count">1</div>
+            </a>
+        </div></div></div></div>
+            <a class="category-link" href="/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/">
+                工程化
+                <div class="category-count">2</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/%E5%89%8D%E7%AB%AF%E6%9E%84%E5%BB%BA/">
+                前端构建
+                <div class="category-count">2</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+                性能优化
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6/">
+                前端进阶
+                <div class="category-count">1</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/">
+                面试技巧
+                <div class="category-count">5</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6/">
+                前端进阶
+                <div class="category-count">5</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/">
+                后端开发
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Node-js/">
+                Node.js
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Node-js/Express/">
+                Express
+                <div class="category-count">1</div>
+            </a>
+        </div></div></div></div></div>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/API%E5%BC%80%E5%8F%91/" rel="tag">API开发</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CI-CD/" rel="tag">CI&#x2F;CD</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Composition-API/" rel="tag">Composition API</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Core-Web-Vitals/" rel="tag">Core Web Vitals</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Express/" rel="tag">Express</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Hooks/" rel="tag">Hooks</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Nuxt3/" rel="tag">Nuxt3</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vite/" rel="tag">Vite</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Webpack/" rel="tag">Webpack</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/" rel="tag">前端开发实战</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">前端性能优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/" rel="tag">前端框架</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">前端模块化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/" rel="tag">后端框架</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%97%E8%A1%A8/" rel="tag">大数据列表</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%9E%84%E5%BB%BA%E4%BC%98%E5%8C%96/" rel="tag">构建优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" rel="tag">状态管理</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%BC%98%E5%8C%96/" rel="tag">移动端优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%B0%81%E8%A3%85/" rel="tag">组件封装</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91/" rel="tag">组件开发</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%87%AA%E5%AE%9A%E4%B9%89Hooks/" rel="tag">自定义Hooks</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">面试题</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%A6%96%E5%B1%8F%E5%8A%A0%E8%BD%BD/" rel="tag">首屏加载</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2026/02 ">
+          二月 2026 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2026/01 ">
+          一月 2026 
+          <div class="archive-count">7 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/12 ">
+          十二月 2025 
+          <div class="archive-count">4 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/11 ">
+          十一月 2025 
+          <div class="archive-count">2 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2026/02/18/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E6%88%98/" title="前端性能优化实战" >
+            <div class="recent-link-text">
+              前端性能优化实战
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/15/Express%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E8%BF%9B%E9%98%B6/" title="Express从基础到进阶" >
+            <div class="recent-link-text">
+              Express从基础到进阶
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/12/Nuxt3%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E8%BF%9B%E9%98%B6/" title="Nuxt3从基础到进阶" >
+            <div class="recent-link-text">
+              Nuxt3从基础到进阶
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/09/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E5%B7%A5%E5%85%B7/" title="前端高频面试题解析：工程化与工具" >
+            <div class="recent-link-text">
+              前端高频面试题解析：工程化与工具
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/07/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="前端高频面试题解析：性能优化" >
+            <div class="recent-link-text">
+              前端高频面试题解析：性能优化
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-前端高频面试题解析：性能优化" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        前端高频面试题解析：性能优化
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2026-01-06T16:00:00.000Z" itemprop="datePublished">2026-01-07</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/">面试技巧</a>><a class="meta-cate-link" href="/categories/%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6/">前端进阶</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            5.7k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Core-Web-Vitals/" rel="tag">Core Web Vitals</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9E%84%E5%BB%BA%E4%BC%98%E5%8C%96/" rel="tag">构建优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">面试题</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="前端高频面试题解析：性能优化"><a href="#前端高频面试题解析：性能优化" class="headerlink" title="前端高频面试题解析：性能优化"></a>前端高频面试题解析：性能优化</h1><h2 id="一、前端性能优化指标"><a href="#一、前端性能优化指标" class="headerlink" title="一、前端性能优化指标"></a>一、前端性能优化指标</h2><p><strong>题目</strong>：请解释 Core Web Vitals（核心 Web 指标），以及如何优化这些指标。</p>
+<p><strong>答案</strong>：<br>Core Web Vitals 是 Google 提出的衡量用户体验的关键指标，包括 LCP、FID 和 CLS。</p>
+<p><strong>解题思路</strong>：</p>
+<ol>
+<li>LCP (Largest Contentful Paint)：最大内容绘制，衡量首屏加载速度</li>
+<li>FID (First Input Delay)：首次输入延迟，衡量交互性</li>
+<li>CLS (Cumulative Layout Shift)：累积布局偏移，衡量视觉稳定性</li>
+</ol>
+<p><strong>延伸知识点</strong>：</p>
+<ul>
+<li>优化 LCP：优化服务器响应时间、使用 CDN、优化资源加载</li>
+<li>优化 FID：减少 JavaScript 执行时间、使用 Web Workers</li>
+<li>优化 CLS：为图片和广告预留空间、避免动态注入内容</li>
+</ul>
+<p><strong>示例代码</strong>：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 优化 CLS 示例 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 为图片预留空间 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> </span></span><br><span class="line"><span class="tag">  <span class="attr">src</span>=<span class="string">&quot;image.jpg&quot;</span> </span></span><br><span class="line"><span class="tag">  <span class="attr">width</span>=<span class="string">&quot;400&quot;</span> </span></span><br><span class="line"><span class="tag">  <span class="attr">height</span>=<span class="string">&quot;300&quot;</span> </span></span><br><span class="line"><span class="tag">  <span class="attr">alt</span>=<span class="string">&quot;Description&quot;</span></span></span><br><span class="line"><span class="tag">&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 或者使用 CSS 占位 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;image-container&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;image.jpg&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;Description&quot;</span> <span class="attr">class</span>=<span class="string">&quot;lazyload&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-class">.image-container</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">width</span>: <span class="number">400px</span>;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">height</span>: <span class="number">300px</span>;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">position</span>: relative;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">overflow</span>: hidden;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-class">.lazyload</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">width</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">height</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">object-fit</span>: cover;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="二、代码分割与懒加载"><a href="#二、代码分割与懒加载" class="headerlink" title="二、代码分割与懒加载"></a>二、代码分割与懒加载</h2><p><strong>题目</strong>：什么是代码分割和懒加载？如何实现？</p>
+<p><strong>答案</strong>：<br>代码分割是将代码分成多个小块，按需加载；懒加载是在需要时才加载资源。</p>
+<p><strong>解题思路</strong>：</p>
+<ol>
+<li>代码分割：使用动态导入 <code>import()</code>、webpack 的代码分割配置</li>
+<li>懒加载：图片懒加载、组件懒加载、路由懒加载</li>
+</ol>
+<p><strong>延伸知识点</strong>：</p>
+<ul>
+<li>动态导入返回一个 Promise</li>
+<li>路由懒加载可以减少初始包大小</li>
+<li>图片懒加载可以使用 Intersection Observer API</li>
+</ul>
+<p><strong>示例代码</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 路由懒加载示例</span></span><br><span class="line"><span class="comment">// React</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">Home</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="string">&#x27;./Home&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">About</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="string">&#x27;./About&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Vue</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">Home</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="string">&#x27;./views/Home.vue&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">About</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="string">&#x27;./views/About.vue&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 组件懒加载示例</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">loadHeavyComponent</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="string">&#x27;./HeavyComponent.vue&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 图片懒加载示例</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">lazyLoadImages</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> images = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;img[data-src]&#x27;</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (<span class="string">&#x27;IntersectionObserver&#x27;</span> <span class="keyword">in</span> <span class="variable language_">window</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> imageObserver = <span class="keyword">new</span> <span class="title class_">IntersectionObserver</span>(<span class="function">(<span class="params">entries</span>) =&gt;</span> &#123;</span><br><span class="line">      entries.<span class="title function_">forEach</span>(<span class="function">(<span class="params">entry</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (entry.<span class="property">isIntersecting</span>) &#123;</span><br><span class="line">          <span class="keyword">const</span> image = entry.<span class="property">target</span>;</span><br><span class="line">          image.<span class="property">src</span> = image.<span class="property">dataset</span>.<span class="property">src</span>;</span><br><span class="line">          image.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;lazy&#x27;</span>);</span><br><span class="line">          imageObserver.<span class="title function_">unobserve</span>(image);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    images.<span class="title function_">forEach</span>(<span class="function">(<span class="params">image</span>) =&gt;</span> &#123;</span><br><span class="line">      imageObserver.<span class="title function_">observe</span>(image);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line"><span class="title function_">lazyLoadImages</span>();</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、构建优化"><a href="#三、构建优化" class="headerlink" title="三、构建优化"></a>三、构建优化</h2><p><strong>题目</strong>：如何优化前端构建过程和构建产物？</p>
+<p><strong>答案</strong>：<br>优化构建过程可以提高开发效率，优化构建产物可以提高应用性能。</p>
+<p><strong>解题思路</strong>：</p>
+<ol>
+<li>构建过程优化：使用缓存、并行构建、增量构建</li>
+<li>构建产物优化：代码压缩、Tree Shaking、代码分割、按需加载</li>
+</ol>
+<p><strong>延伸知识点</strong>：</p>
+<ul>
+<li>Tree Shaking：移除未使用的代码</li>
+<li>代码压缩：使用 Terser、CSSNano 等工具</li>
+<li>模块合并：减少 HTTP 请求</li>
+</ul>
+<p><strong>示例代码</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack 构建优化配置</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">TerserPlugin</span> = <span class="built_in">require</span>(<span class="string">&#x27;terser-webpack-plugin&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">CssMinimizerPlugin</span> = <span class="built_in">require</span>(<span class="string">&#x27;css-minimizer-webpack-plugin&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">optimization</span>: &#123;</span><br><span class="line">    <span class="attr">minimize</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">minimizer</span>: [</span><br><span class="line">      <span class="keyword">new</span> <span class="title class_">TerserPlugin</span>(&#123;</span><br><span class="line">        <span class="attr">terserOptions</span>: &#123;</span><br><span class="line">          <span class="attr">compress</span>: &#123;</span><br><span class="line">            <span class="attr">drop_console</span>: <span class="literal">true</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="keyword">new</span> <span class="title class_">CssMinimizerPlugin</span>()</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">splitChunks</span>: &#123;</span><br><span class="line">      <span class="attr">chunks</span>: <span class="string">&#x27;all&#x27;</span>,</span><br><span class="line">      <span class="attr">cacheGroups</span>: &#123;</span><br><span class="line">        <span class="attr">vendor</span>: &#123;</span><br><span class="line">          <span class="attr">test</span>: <span class="regexp">/[\\/]node_modules[\\/]/</span>,</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;vendors&#x27;</span>,</span><br><span class="line">          <span class="attr">chunks</span>: <span class="string">&#x27;all&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">cache</span>: &#123;</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&#x27;filesystem&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Vite 构建优化配置</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">build</span>: &#123;</span><br><span class="line">    <span class="attr">target</span>: <span class="string">&#x27;es2015&#x27;</span>,</span><br><span class="line">    <span class="attr">minify</span>: <span class="string">&#x27;terser&#x27;</span>,</span><br><span class="line">    <span class="attr">terserOptions</span>: &#123;</span><br><span class="line">      <span class="attr">compress</span>: &#123;</span><br><span class="line">        <span class="attr">drop_console</span>: <span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rollupOptions</span>: &#123;</span><br><span class="line">      <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="attr">manualChunks</span>: &#123;</span><br><span class="line">          <span class="attr">vendor</span>: [<span class="string">&#x27;vue&#x27;</span>],</span><br><span class="line">          <span class="attr">router</span>: [<span class="string">&#x27;vue-router&#x27;</span>],</span><br><span class="line">          <span class="attr">store</span>: [<span class="string">&#x27;pinia&#x27;</span>]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、资源优化"><a href="#四、资源优化" class="headerlink" title="四、资源优化"></a>四、资源优化</h2><p><strong>题目</strong>：如何优化前端资源加载？</p>
+<p><strong>答案</strong>：<br>资源优化是前端性能优化的重要部分，包括图片、字体、CSS 和 JavaScript 等资源的优化。</p>
+<p><strong>解题思路</strong>：</p>
+<ol>
+<li>图片优化：使用适当的格式、压缩图片、懒加载</li>
+<li>字体优化：使用系统字体、字体子集、字体预加载</li>
+<li>CSS 优化：内联关键 CSS、减少 CSS 文件大小</li>
+<li>JavaScript 优化：减少文件大小、使用模块化、按需加载</li>
+</ol>
+<p><strong>延伸知识点</strong>：</p>
+<ul>
+<li>图片格式选择：WebP &gt; JPEG &gt; PNG</li>
+<li>字体加载策略：使用 <code>font-display</code> 属性</li>
+<li>资源加载顺序：CSS 在前，JavaScript 在后</li>
+<li>使用 CDN：加速资源加载</li>
+</ul>
+<p><strong>示例代码</strong>：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 优化资源加载示例 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 1. 预加载关键资源 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preload&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/fonts/font.woff2&quot;</span> <span class="attr">as</span>=<span class="string">&quot;font&quot;</span> <span class="attr">type</span>=<span class="string">&quot;font/woff2&quot;</span> <span class="attr">crossorigin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preload&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/js/main.js&quot;</span> <span class="attr">as</span>=<span class="string">&quot;script&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 2. 延迟加载非关键资源 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/css/non-critical.css&quot;</span> <span class="attr">media</span>=<span class="string">&quot;print&quot;</span> <span class="attr">onload</span>=<span class="string">&quot;this.media=&#x27;all&#x27;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">defer</span> <span class="attr">src</span>=<span class="string">&quot;/js/non-critical.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 3. 使用适当的图片格式 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">picture</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span> <span class="attr">srcset</span>=<span class="string">&quot;image.webp&quot;</span> <span class="attr">type</span>=<span class="string">&quot;image/webp&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span> <span class="attr">srcset</span>=<span class="string">&quot;image.jpg&quot;</span> <span class="attr">type</span>=<span class="string">&quot;image/jpeg&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;image.jpg&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;Description&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">picture</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 4. 字体优化 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="keyword">@font-face</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">font-family</span>: <span class="string">&#x27;MyFont&#x27;</span>;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">&#x27;myfont.woff2&#x27;</span>) <span class="built_in">format</span>(<span class="string">&#x27;woff2&#x27;</span>);</span></span><br><span class="line"><span class="language-css">  <span class="attribute">font-display</span>: swap;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="五、渲染性能优化"><a href="#五、渲染性能优化" class="headerlink" title="五、渲染性能优化"></a>五、渲染性能优化</h2><p><strong>题目</strong>：如何优化前端渲染性能？</p>
+<p><strong>答案</strong>：<br>渲染性能优化可以提高页面的响应速度和用户体验。</p>
+<p><strong>解题思路</strong>：</p>
+<ol>
+<li>减少重排重绘：使用 transform 和 opacity、批量更新 DOM</li>
+<li>使用 CSS 动画：比 JavaScript 动画性能更好</li>
+<li>优化关键渲染路径：内联关键 CSS、延迟加载非关键资源</li>
+<li>使用虚拟列表：处理大型列表</li>
+</ol>
+<p><strong>延伸知识点</strong>：</p>
+<ul>
+<li>重排的触发条件：修改元素位置、大小、内容等</li>
+<li>重绘的触发条件：修改元素颜色、背景等</li>
+<li>合成层的创建条件：transform、opacity、filter 等</li>
+</ul>
+<p><strong>示例代码</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 减少重排的示例</span></span><br><span class="line"><span class="comment">// 不好的做法</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;</span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;list&#x27;</span>).<span class="property">innerHTML</span> += <span class="string">`&lt;li&gt;Item <span class="subst">$&#123;i&#125;</span>&lt;/li&gt;`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 好的做法</span></span><br><span class="line"><span class="keyword">const</span> fragment = <span class="variable language_">document</span>.<span class="title function_">createDocumentFragment</span>();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;</span><br><span class="line">  <span class="keyword">const</span> li = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;li&#x27;</span>);</span><br><span class="line">  li.<span class="property">textContent</span> = <span class="string">`Item <span class="subst">$&#123;i&#125;</span>`</span>;</span><br><span class="line">  fragment.<span class="title function_">appendChild</span>(li);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;list&#x27;</span>).<span class="title function_">appendChild</span>(fragment);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用虚拟列表</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">VirtualList</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;react-window&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">MyList</span>(<span class="params">&#123; items &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">VirtualList</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">width</span>=<span class="string">&quot;100%&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">height</span>=<span class="string">&#123;600&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">itemCount</span>=<span class="string">&#123;items.length&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">itemSize</span>=<span class="string">&#123;50&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    &gt;</span></span></span><br><span class="line"><span class="language-xml">      &#123;(&#123; index, style &#125;) =&gt; (</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;style&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          &#123;items[index].name&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      )&#125;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">VirtualList</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h2><p>性能优化是前端开发的重要组成部分，掌握性能优化的核心指标和优化策略，对于通过前端面试至关重要。</p>
+<p>在准备面试时，不仅要了解性能优化的基本概念，还要掌握具体的优化方法和工具。同时，要关注性能优化的最新趋势，如 Core Web Vitals 和 Web Vitals 等。</p>
+<hr>
+<p><strong>更多资源</strong>：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://web.dev/vitals/">Google Web Vitals</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/Performance">MDN Web Performance</a></li>
+<li><a target="_blank" rel="noopener" href="https://webpack.js.org/guides/build-performance/">Webpack 性能优化</a></li>
+<li><a target="_blank" rel="noopener" href="https://vitejs.dev/guide/build.html">Vite 性能优化</a></li>
+</ul>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2026/01/09/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E5%B7%A5%E5%85%B7/"
+      title="前端高频面试题解析：工程化与工具"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        前端高频面试题解析：工程化与工具
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2026/01/05/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%8E%E7%BD%91%E7%BB%9C/"
+      title="前端高频面试题解析：浏览器与网络"
+     >
+
+    <p class="title-text">
+      
+        前端高频面试题解析：浏览器与网络
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2026 mangguo<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+</body>
+</html>

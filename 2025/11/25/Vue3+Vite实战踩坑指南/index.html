@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+
+<html theme="dark" showBanner="true" hasBanner="true" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+
+  
+  <title>Vue3+Vite实战踩坑指南 | 个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="Vue3+Vite实战踩坑指南——从搭建到部署，避坑高效开发前言Vue3的Composition API、Teleport、Suspense等新特性，搭配Vite的极速热更新、按需构建，已经成为前端开发的主流组合。但在实际开发中，从项目搭建、依赖配置到功能实现、部署上线，总会遇到各种“坑”——热更新失效、依赖报错、打包异常、跨域问题等。本文结合笔者多个Vue3+Vite项目的实战经验，整理了最常见">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue3+Vite实战踩坑指南">
+<meta property="og:url" content="https://mangguo68.github.io/2025/11/25/Vue3+Vite%E5%AE%9E%E6%88%98%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="个人博客">
+<meta property="og:description" content="Vue3+Vite实战踩坑指南——从搭建到部署，避坑高效开发前言Vue3的Composition API、Teleport、Suspense等新特性，搭配Vite的极速热更新、按需构建，已经成为前端开发的主流组合。但在实际开发中，从项目搭建、依赖配置到功能实现、部署上线，总会遇到各种“坑”——热更新失效、依赖报错、打包异常、跨域问题等。本文结合笔者多个Vue3+Vite项目的实战经验，整理了最常见">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-20T10:20:16.904Z">
+<meta property="article:author" content="mangguo">
+<meta property="article:tag" content="Vite">
+<meta property="article:tag" content="Vue3">
+<meta property="article:tag" content="前端开发实战">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/images/1.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文档</a>
+    
+      <a class="main-nav-link" href="/about">关于</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文档</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/images/cdf58dc918fb56bfd0dacf18ec944465.webp></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">mangguo </div>
+      <div class="dot"></div>
+      <div class="subtitle">一名前端开发者 </div>
+      <div class="link-list">
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://twitter.com" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://store.steampowered.com" title="Steam"><i class="fa-brands fa-steam"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/mangguo68" title="GitHub"><i class="fa-brands fa-github"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+  <div class="sticky">
+    
+      
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/">
+                框架进阶
+                <div class="category-count">4</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Vue3/">
+                Vue3
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/React/">
+                React
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Nuxt/">
+                Nuxt
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Nuxt/Vue/">
+                Vue
+                <div class="category-count">1</div>
+            </a>
+        </div></div></div></div>
+            <a class="category-link" href="/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/">
+                工程化
+                <div class="category-count">2</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/%E5%89%8D%E7%AB%AF%E6%9E%84%E5%BB%BA/">
+                前端构建
+                <div class="category-count">2</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+                性能优化
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6/">
+                前端进阶
+                <div class="category-count">1</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/">
+                面试技巧
+                <div class="category-count">5</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6/">
+                前端进阶
+                <div class="category-count">5</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/">
+                后端开发
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Node-js/">
+                Node.js
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Node-js/Express/">
+                Express
+                <div class="category-count">1</div>
+            </a>
+        </div></div></div></div></div>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/API%E5%BC%80%E5%8F%91/" rel="tag">API开发</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CI-CD/" rel="tag">CI&#x2F;CD</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Composition-API/" rel="tag">Composition API</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Core-Web-Vitals/" rel="tag">Core Web Vitals</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Express/" rel="tag">Express</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Hooks/" rel="tag">Hooks</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Nuxt3/" rel="tag">Nuxt3</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vite/" rel="tag">Vite</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Webpack/" rel="tag">Webpack</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/" rel="tag">前端开发实战</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">前端性能优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/" rel="tag">前端框架</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">前端模块化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/" rel="tag">后端框架</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%97%E8%A1%A8/" rel="tag">大数据列表</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%9E%84%E5%BB%BA%E4%BC%98%E5%8C%96/" rel="tag">构建优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" rel="tag">状态管理</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%BC%98%E5%8C%96/" rel="tag">移动端优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%B0%81%E8%A3%85/" rel="tag">组件封装</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91/" rel="tag">组件开发</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%87%AA%E5%AE%9A%E4%B9%89Hooks/" rel="tag">自定义Hooks</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">面试题</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%A6%96%E5%B1%8F%E5%8A%A0%E8%BD%BD/" rel="tag">首屏加载</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2026/02 ">
+          二月 2026 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2026/01 ">
+          一月 2026 
+          <div class="archive-count">7 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/12 ">
+          十二月 2025 
+          <div class="archive-count">4 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/11 ">
+          十一月 2025 
+          <div class="archive-count">2 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2026/02/18/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E6%88%98/" title="前端性能优化实战" >
+            <div class="recent-link-text">
+              前端性能优化实战
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/15/Express%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E8%BF%9B%E9%98%B6/" title="Express从基础到进阶" >
+            <div class="recent-link-text">
+              Express从基础到进阶
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/12/Nuxt3%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E8%BF%9B%E9%98%B6/" title="Nuxt3从基础到进阶" >
+            <div class="recent-link-text">
+              Nuxt3从基础到进阶
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/09/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E5%B7%A5%E5%85%B7/" title="前端高频面试题解析：工程化与工具" >
+            <div class="recent-link-text">
+              前端高频面试题解析：工程化与工具
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/07/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="前端高频面试题解析：性能优化" >
+            <div class="recent-link-text">
+              前端高频面试题解析：性能优化
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-Vue3+Vite实战踩坑指南" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        Vue3+Vite实战踩坑指南
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2025-11-24T16:00:00.000Z" itemprop="datePublished">2025-11-25</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/">框架进阶</a>><a class="meta-cate-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Vue3/">Vue3</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            5.1k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vite/" rel="tag">Vite</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/" rel="tag">前端开发实战</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="Vue3-Vite实战踩坑指南——从搭建到部署，避坑高效开发"><a href="#Vue3-Vite实战踩坑指南——从搭建到部署，避坑高效开发" class="headerlink" title="Vue3+Vite实战踩坑指南——从搭建到部署，避坑高效开发"></a>Vue3+Vite实战踩坑指南——从搭建到部署，避坑高效开发</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Vue3的Composition API、Teleport、Suspense等新特性，搭配Vite的极速热更新、按需构建，已经成为前端开发的主流组合。但在实际开发中，从项目搭建、依赖配置到功能实现、部署上线，总会遇到各种“坑”——热更新失效、依赖报错、打包异常、跨域问题等。本文结合笔者多个Vue3+Vite项目的实战经验，整理了最常见的10个坑及解决方案，帮你避开弯路，高效开发。</p>
+<h2 id="一、项目搭建阶段：依赖与配置坑"><a href="#一、项目搭建阶段：依赖与配置坑" class="headerlink" title="一、项目搭建阶段：依赖与配置坑"></a>一、项目搭建阶段：依赖与配置坑</h2><h3 id="坑1：Vite创建项目后，安装依赖报错“Cannot-find-module-‘vue-router’”"><a href="#坑1：Vite创建项目后，安装依赖报错“Cannot-find-module-‘vue-router’”" class="headerlink" title="坑1：Vite创建项目后，安装依赖报错“Cannot find module ‘vue-router’”"></a>坑1：Vite创建项目后，安装依赖报错“Cannot find module ‘vue-router’”</h3><p>原因：Vite创建Vue项目时，默认不安装vue-router、pinia等依赖，若手动安装时版本不兼容（如Vue3对应vue-router4+，Vue2对应vue-router3+），会导致依赖无法识别。</p>
+<p>解决方案：</p>
+<ol>
+<li><p>确认Vue版本：Vue3对应的vue-router版本需≥4.0.0，pinia版本需≥2.0.0；</p>
+</li>
+<li><p>正确安装命令：<code>npm install vue-router@4 pinia@2 --save</code>；</p>
+</li>
+<li><p>若仍报错，删除node_modules和package-lock.json，执行<code>npm cache clean --force</code>，重新安装依赖。</p>
+</li>
+</ol>
+<h3 id="坑2：Vite配置alias（路径别名）后，IDE报错“无法找到模块”"><a href="#坑2：Vite配置alias（路径别名）后，IDE报错“无法找到模块”" class="headerlink" title="坑2：Vite配置alias（路径别名）后，IDE报错“无法找到模块”"></a>坑2：Vite配置alias（路径别名）后，IDE报错“无法找到模块”</h3><p>原因：Vite中配置的alias仅在构建和运行时生效，IDE（如VS Code）无法识别，导致代码提示失效、报错。</p>
+<p>解决方案：</p>
+<ol>
+<li>在vite.config.js中配置alias：</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> vue <span class="keyword">from</span> <span class="string">&#x27;@vitejs/plugin-vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> path <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [<span class="title function_">vue</span>()],</span><br><span class="line">  <span class="attr">resolve</span>: &#123;</span><br><span class="line">    <span class="attr">alias</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;@&#x27;</span>: path.<span class="title function_">resolve</span>(__dirname, <span class="string">&#x27;./src&#x27;</span>) <span class="comment">// 配置@指向src目录</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>在项目根目录创建jsconfig.json（JS项目）或tsconfig.json（TS项目），配置paths：</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;baseUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;.&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;paths&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;@/*&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;src/*&quot;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;include&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;src/**/*&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;exclude&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;node_modules&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>重启VS Code，IDE即可识别alias路径，恢复代码提示。</li>
+</ol>
+<h2 id="二、开发阶段：功能实现坑"><a href="#二、开发阶段：功能实现坑" class="headerlink" title="二、开发阶段：功能实现坑"></a>二、开发阶段：功能实现坑</h2><h3 id="坑3：Composition-API中使用ref，修改值后页面不更新"><a href="#坑3：Composition-API中使用ref，修改值后页面不更新" class="headerlink" title="坑3：Composition API中使用ref，修改值后页面不更新"></a>坑3：Composition API中使用ref，修改值后页面不更新</h3><p>原因：ref用于包装基本类型数据（String、Number、Boolean），修改值时需通过<code>.value</code>操作；若包装的是引用类型数据（Object、Array），直接修改属性无需<code>.value</code>，但若直接替换整个引用（如<code>arr = []</code>），需通过<code>.value</code>。</p>
+<p>错误示例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">const</span> user = <span class="title function_">ref</span>(&#123; <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span> &#125;)</span><br><span class="line"><span class="keyword">const</span> arr = <span class="title function_">ref</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">// 错误：基本类型未使用.value</span></span><br><span class="line">count = <span class="number">1</span> </span><br><span class="line"></span><br><span class="line"><span class="comment">// 错误：引用类型直接替换整个对象，未使用.value</span></span><br><span class="line">arr = [] </span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确示例：</span></span><br><span class="line">count.<span class="property">value</span> = <span class="number">1</span> <span class="comment">// 基本类型需.value</span></span><br><span class="line">user.<span class="property">value</span>.<span class="property">name</span> = <span class="string">&#x27;李四&#x27;</span> <span class="comment">// 引用类型修改属性，无需.value</span></span><br><span class="line">arr.<span class="property">value</span> = [] <span class="comment">// 引用类型替换整个引用，需.value</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="坑4：Teleport组件无法正常渲染，提示“Target-element-not-found”"><a href="#坑4：Teleport组件无法正常渲染，提示“Target-element-not-found”" class="headerlink" title="坑4：Teleport组件无法正常渲染，提示“Target element not found”"></a>坑4：Teleport组件无法正常渲染，提示“Target element not found”</h3><p>原因：Teleport的<code>to</code>属性指定的目标元素，在组件渲染时还未挂载到DOM中，导致Teleport无法找到目标元素。</p>
+<p>解决方案：</p>
+<ol>
+<li><p>确保目标元素在index.html中提前定义（如<code>&lt;div id=&quot;modal&quot;&gt;&lt;/div&gt;</code>）；</p>
+</li>
+<li><p>若目标元素是动态渲染的（如在另一个组件中），可添加<code>disabled</code>属性，等待目标元素挂载后再启用Teleport：</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;Teleport to=&quot;#modal&quot; :disabled=&quot;!isModalMounted&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;modal&quot;&gt;弹窗内容&lt;/div&gt;</span><br><span class="line">&lt;/Teleport&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, nextTick &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const isModalMounted = ref(false)</span><br><span class="line"></span><br><span class="line">// 等待目标元素挂载完成</span><br><span class="line">nextTick(() =&gt; &#123;</span><br><span class="line">  isModalMounted.value = true</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="坑5：Vite热更新失效，修改代码后页面不刷新"><a href="#坑5：Vite热更新失效，修改代码后页面不刷新" class="headerlink" title="坑5：Vite热更新失效，修改代码后页面不刷新"></a>坑5：Vite热更新失效，修改代码后页面不刷新</h3><p>原因：常见于以下3种情况：</p>
+<ul>
+<li><p>配置了alias，但路径写错，导致Vite无法监听文件变化；</p>
+</li>
+<li><p>项目目录中存在中文路径，Vite对中文路径支持不佳；</p>
+</li>
+<li><p>依赖冲突，如安装了旧版本的@vitejs&#x2F;plugin-vue。</p>
+</li>
+</ul>
+<p>解决方案：</p>
+<ul>
+<li><p>检查vite.config.js中的alias配置，确保路径正确；</p>
+</li>
+<li><p>修改项目目录，移除中文、特殊字符，使用英文路径；</p>
+</li>
+<li><p>更新依赖：<code>npm update @vitejs/plugin-vue</code>，确保插件版本与Vite版本兼容（Vite3对应plugin-vue3+，Vite4对应plugin-vue4+）。</p>
+</li>
+</ul>
+<h2 id="三、打包部署阶段：异常坑"><a href="#三、打包部署阶段：异常坑" class="headerlink" title="三、打包部署阶段：异常坑"></a>三、打包部署阶段：异常坑</h2><h3 id="坑6：Vite打包后，打开index-html出现空白页，控制台报错“Cannot-find-module-‘-xxx-js’”"><a href="#坑6：Vite打包后，打开index-html出现空白页，控制台报错“Cannot-find-module-‘-xxx-js’”" class="headerlink" title="坑6：Vite打包后，打开index.html出现空白页，控制台报错“Cannot find module ‘.&#x2F;xxx.js’”"></a>坑6：Vite打包后，打开index.html出现空白页，控制台报错“Cannot find module ‘.&#x2F;xxx.js’”</h3><p>原因：打包后的资源路径错误，默认情况下，Vite打包后的资源路径是绝对路径（&#x2F;static&#x2F;xxx.js），若部署在非根目录（如<a target="_blank" rel="noopener" href="https://xxx.com/my-project/%EF%BC%89%EF%BC%8C%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E4%BC%9A%E5%AF%BC%E8%87%B4%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%A0%E6%B3%95%E6%89%BE%E5%88%B0%E8%B5%84%E6%BA%90%E3%80%82">https://xxx.com/my-project/），绝对路径会导致浏览器无法找到资源。</a></p>
+<p>解决方案：</p>
+<ol>
+<li>在vite.config.js中配置base路径，改为相对路径（.&#x2F;）或部署路径（&#x2F;my-project&#x2F;）：</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">base</span>: <span class="string">&#x27;./&#x27;</span>, <span class="comment">// 相对路径，适配所有非根目录部署</span></span><br><span class="line">  <span class="comment">// 若部署在https://xxx.com/my-project/，则配置为base: &#x27;/my-project/&#x27;</span></span><br><span class="line">  <span class="attr">plugins</span>: [<span class="title function_">vue</span>()],</span><br><span class="line">  <span class="attr">resolve</span>: &#123;</span><br><span class="line">    <span class="attr">alias</span>: &#123; <span class="string">&#x27;@&#x27;</span>: path.<span class="title function_">resolve</span>(__dirname, <span class="string">&#x27;./src&#x27;</span>) &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>重新打包（<code>npm run build</code>），打开index.html即可正常显示。</li>
+</ol>
+<h3 id="坑7：打包后CSS样式丢失，或样式错乱"><a href="#坑7：打包后CSS样式丢失，或样式错乱" class="headerlink" title="坑7：打包后CSS样式丢失，或样式错乱"></a>坑7：打包后CSS样式丢失，或样式错乱</h3><p>原因：</p>
+<ul>
+<li><p>使用了scoped样式，但在子组件中修改父组件样式时，未使用<code>::v-deep</code>（Vue3中替代&#x2F;deep&#x2F;）；</p>
+</li>
+<li><p>引入的第三方UI库（如Element Plus）样式未被正确打包；</p>
+</li>
+<li><p>CSS选择器优先级问题，打包后样式被覆盖。</p>
+</li>
+</ul>
+<p>解决方案：</p>
+<ul>
+<li>修改父组件scoped样式中的子组件样式，使用<code>::v-deep</code>：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;style scoped&gt;</span><br><span class="line">/* 正确：修改子组件样式 */</span><br><span class="line">::v-deep .child-class &#123;</span><br><span class="line">  color: red;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Element Plus样式引入：在main.js中手动引入样式文件（<code>import &#39;element-plus/dist/index.css&#39;</code>），避免按需引入时样式丢失；</p>
+</li>
+<li><p>提升样式优先级：关键样式添加<code>!important</code>（谨慎使用），或优化选择器，确保样式生效。</p>
+</li>
+</ul>
+<h3 id="坑8：部署后跨域问题依旧存在，接口请求报错“CORS-policy”"><a href="#坑8：部署后跨域问题依旧存在，接口请求报错“CORS-policy”" class="headerlink" title="坑8：部署后跨域问题依旧存在，接口请求报错“CORS policy”"></a>坑8：部署后跨域问题依旧存在，接口请求报错“CORS policy”</h3><p>原因：开发阶段在vite.config.js中配置的proxy代理，仅在开发环境生效，打包部署后，代理配置失效，浏览器直接向后端接口发起请求，导致跨域。</p>
+<p>解决方案：</p>
+<ul>
+<li><p>后端配置跨域：推荐方案，让后端在响应头中添加<code>Access-Control-Allow-Origin</code>、<code>Access-Control-Allow-Methods</code>等字段，允许前端域名访问；</p>
+</li>
+<li><p>前端部署时配置反向代理：若后端无法修改，可在部署服务器（如Nginx、Apache）中配置反向代理，将前端接口请求转发到后端接口，避免跨域。</p>
+</li>
+</ul>
+<p>Nginx反向代理配置示例：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">  <span class="attribute">server_name</span> your-domain.com; <span class="comment"># 你的前端域名</span></span><br><span class="line"></span><br><span class="line">  <span class="section">location</span> / &#123;</span><br><span class="line">    <span class="attribute">root</span> /usr/share/nginx/html; <span class="comment"># 前端打包后文件路径</span></span><br><span class="line">    <span class="attribute">index</span> index.html;</span><br><span class="line">    <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html; <span class="comment"># 解决Vue路由History模式刷新404问题</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 反向代理接口，将/api请求转发到后端接口</span></span><br><span class="line">  <span class="section">location</span> /api &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://your-backend-domain.com; <span class="comment"># 后端接口域名</span></span><br><span class="line">    <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、其他常见坑"><a href="#四、其他常见坑" class="headerlink" title="四、其他常见坑"></a>四、其他常见坑</h2><h3 id="坑9：Vue3路由History模式，部署后刷新页面出现404"><a href="#坑9：Vue3路由History模式，部署后刷新页面出现404" class="headerlink" title="坑9：Vue3路由History模式，部署后刷新页面出现404"></a>坑9：Vue3路由History模式，部署后刷新页面出现404</h3><p>原因：History模式下，Vue路由是前端路由，刷新页面时，浏览器会向服务器请求当前路径的资源，而服务器中没有对应的页面，导致404。</p>
+<p>解决方案：如上述Nginx配置所示，添加<code>try_files $uri $uri/ /index.html;</code>，让服务器在找不到资源时，返回index.html，由前端路由处理路径。</p>
+<h3 id="坑10：使用TypeScript时，报错“Property-‘xxx’-does-not-exist-on-type-‘Object’”"><a href="#坑10：使用TypeScript时，报错“Property-‘xxx’-does-not-exist-on-type-‘Object’”" class="headerlink" title="坑10：使用TypeScript时，报错“Property ‘xxx’ does not exist on type ‘Object’”"></a>坑10：使用TypeScript时，报错“Property ‘xxx’ does not exist on type ‘Object’”</h3><p>原因：Vue3+TypeScript中，ref、reactive默认会进行类型推断，但对于引用类型，若未明确指定类型，TypeScript无法识别其属性。</p>
+<p>解决方案：明确指定类型，使用interface定义接口：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; ref, reactive &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义接口</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">User</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">age</span>?: <span class="built_in">number</span> <span class="comment">// 可选属性</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 明确指定ref类型</span></span><br><span class="line"><span class="keyword">const</span> user = ref&lt;<span class="title class_">User</span>&gt;(&#123; <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 明确指定reactive类型</span></span><br><span class="line"><span class="keyword">const</span> user2 = reactive&lt;<span class="title class_">User</span>&gt;(&#123; <span class="attr">name</span>: <span class="string">&#x27;李四&#x27;</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>Vue3+Vite的组合虽然高效，但在实战中难免遇到各种坑，核心原因大多是对新特性、配置细节不熟悉，或版本兼容、环境差异导致。本文整理的10个坑，覆盖了项目搭建、开发、部署的全流程，解决方案均经过实战验证，可直接复用。</p>
+<p>建议开发过程中，多查看Vue3和Vite的官方文档，遇到问题时，优先排查版本兼容、配置错误，再考虑代码逻辑问题。后续将持续更新更多实战坑点，欢迎留言分享你的踩坑经历～</p>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2025/11/30/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B/"
+      title="前端模块化发展历程"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        前端模块化发展历程
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right  disabled "
+     >
+
+    <p class="title-text">
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2026 mangguo<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+</body>
+</html>

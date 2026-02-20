@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+
+
+<html theme="dark" showBanner="true" hasBanner="true" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+
+  
+  <title>Nuxt3从基础到进阶 | 个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="Nuxt3从基础到进阶一、Nuxt 3 简介1. 什么是 Nuxt 3？Nuxt 3 是基于 Vue 3 的全栈框架，提供了服务器端渲染（SSR）、静态站点生成（SSG）、路由管理、状态管理等功能，帮助开发者快速构建高性能的 Vue 应用。 2. Nuxt 3 的优势 服务器端渲染：提高首屏加载速度和 SEO 优化 静态站点生成：预构建页面，提供极致的加载性能 自动路由：基于文件系统的路由管理 状">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nuxt3从基础到进阶">
+<meta property="og:url" content="https://mangguo68.github.io/2026/01/12/Nuxt3%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E8%BF%9B%E9%98%B6/index.html">
+<meta property="og:site_name" content="个人博客">
+<meta property="og:description" content="Nuxt3从基础到进阶一、Nuxt 3 简介1. 什么是 Nuxt 3？Nuxt 3 是基于 Vue 3 的全栈框架，提供了服务器端渲染（SSR）、静态站点生成（SSG）、路由管理、状态管理等功能，帮助开发者快速构建高性能的 Vue 应用。 2. Nuxt 3 的优势 服务器端渲染：提高首屏加载速度和 SEO 优化 静态站点生成：预构建页面，提供极致的加载性能 自动路由：基于文件系统的路由管理 状">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-20T10:16:32.930Z">
+<meta property="article:author" content="mangguo">
+<meta property="article:tag" content="Nuxt3">
+<meta property="article:tag" content="SSR">
+<meta property="article:tag" content="Vue3">
+<meta property="article:tag" content="前端框架">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/images/1.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文档</a>
+    
+      <a class="main-nav-link" href="/about">关于</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文档</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/images/cdf58dc918fb56bfd0dacf18ec944465.webp></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">mangguo </div>
+      <div class="dot"></div>
+      <div class="subtitle">一名前端开发者 </div>
+      <div class="link-list">
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://twitter.com" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://store.steampowered.com" title="Steam"><i class="fa-brands fa-steam"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/mangguo68" title="GitHub"><i class="fa-brands fa-github"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+  <div class="sticky">
+    
+      
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/">
+                框架进阶
+                <div class="category-count">4</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Vue3/">
+                Vue3
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/React/">
+                React
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Nuxt/">
+                Nuxt
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Nuxt/Vue/">
+                Vue
+                <div class="category-count">1</div>
+            </a>
+        </div></div></div></div>
+            <a class="category-link" href="/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/">
+                工程化
+                <div class="category-count">2</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/%E5%89%8D%E7%AB%AF%E6%9E%84%E5%BB%BA/">
+                前端构建
+                <div class="category-count">2</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+                性能优化
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6/">
+                前端进阶
+                <div class="category-count">1</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/">
+                面试技巧
+                <div class="category-count">5</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6/">
+                前端进阶
+                <div class="category-count">5</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/">
+                后端开发
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Node-js/">
+                Node.js
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Node-js/Express/">
+                Express
+                <div class="category-count">1</div>
+            </a>
+        </div></div></div></div></div>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/API%E5%BC%80%E5%8F%91/" rel="tag">API开发</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CI-CD/" rel="tag">CI&#x2F;CD</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Composition-API/" rel="tag">Composition API</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Core-Web-Vitals/" rel="tag">Core Web Vitals</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Express/" rel="tag">Express</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Hooks/" rel="tag">Hooks</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Nuxt3/" rel="tag">Nuxt3</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vite/" rel="tag">Vite</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Webpack/" rel="tag">Webpack</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/" rel="tag">前端开发实战</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">前端性能优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/" rel="tag">前端框架</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">前端模块化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/" rel="tag">后端框架</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%97%E8%A1%A8/" rel="tag">大数据列表</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%9E%84%E5%BB%BA%E4%BC%98%E5%8C%96/" rel="tag">构建优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" rel="tag">状态管理</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%BC%98%E5%8C%96/" rel="tag">移动端优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%B0%81%E8%A3%85/" rel="tag">组件封装</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91/" rel="tag">组件开发</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%87%AA%E5%AE%9A%E4%B9%89Hooks/" rel="tag">自定义Hooks</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">面试题</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%A6%96%E5%B1%8F%E5%8A%A0%E8%BD%BD/" rel="tag">首屏加载</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2026/02 ">
+          二月 2026 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2026/01 ">
+          一月 2026 
+          <div class="archive-count">7 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/12 ">
+          十二月 2025 
+          <div class="archive-count">4 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/11 ">
+          十一月 2025 
+          <div class="archive-count">2 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2026/02/18/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E6%88%98/" title="前端性能优化实战" >
+            <div class="recent-link-text">
+              前端性能优化实战
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/15/Express%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E8%BF%9B%E9%98%B6/" title="Express从基础到进阶" >
+            <div class="recent-link-text">
+              Express从基础到进阶
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/12/Nuxt3%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E8%BF%9B%E9%98%B6/" title="Nuxt3从基础到进阶" >
+            <div class="recent-link-text">
+              Nuxt3从基础到进阶
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/09/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E5%B7%A5%E5%85%B7/" title="前端高频面试题解析：工程化与工具" >
+            <div class="recent-link-text">
+              前端高频面试题解析：工程化与工具
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/07/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="前端高频面试题解析：性能优化" >
+            <div class="recent-link-text">
+              前端高频面试题解析：性能优化
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-Nuxt3从基础到进阶" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        Nuxt3从基础到进阶
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2026-01-11T16:00:00.000Z" itemprop="datePublished">2026-01-12</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/">框架进阶</a>><a class="meta-cate-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Nuxt/">Nuxt</a>><a class="meta-cate-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Nuxt/Vue/">Vue</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            13k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nuxt3/" rel="tag">Nuxt3</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/" rel="tag">前端框架</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="Nuxt3从基础到进阶"><a href="#Nuxt3从基础到进阶" class="headerlink" title="Nuxt3从基础到进阶"></a>Nuxt3从基础到进阶</h1><h2 id="一、Nuxt-3-简介"><a href="#一、Nuxt-3-简介" class="headerlink" title="一、Nuxt 3 简介"></a>一、Nuxt 3 简介</h2><h3 id="1-什么是-Nuxt-3？"><a href="#1-什么是-Nuxt-3？" class="headerlink" title="1. 什么是 Nuxt 3？"></a>1. 什么是 Nuxt 3？</h3><p>Nuxt 3 是基于 Vue 3 的全栈框架，提供了服务器端渲染（SSR）、静态站点生成（SSG）、路由管理、状态管理等功能，帮助开发者快速构建高性能的 Vue 应用。</p>
+<h3 id="2-Nuxt-3-的优势"><a href="#2-Nuxt-3-的优势" class="headerlink" title="2. Nuxt 3 的优势"></a>2. Nuxt 3 的优势</h3><ul>
+<li><strong>服务器端渲染</strong>：提高首屏加载速度和 SEO 优化</li>
+<li><strong>静态站点生成</strong>：预构建页面，提供极致的加载性能</li>
+<li><strong>自动路由</strong>：基于文件系统的路由管理</li>
+<li><strong>状态管理</strong>：内置 Pinia 状态管理</li>
+<li><strong>模块化</strong>：可扩展的模块系统</li>
+<li><strong>类型安全</strong>：内置 TypeScript 支持</li>
+<li><strong>开发体验</strong>：热更新、快速构建</li>
+</ul>
+<h3 id="3-Nuxt-3-vs-Nuxt-2"><a href="#3-Nuxt-3-vs-Nuxt-2" class="headerlink" title="3. Nuxt 3 vs Nuxt 2"></a>3. Nuxt 3 vs Nuxt 2</h3><ul>
+<li><strong>Vue 3 集成</strong>：使用 Vue 3 的 Composition API</li>
+<li><strong>Vite 构建</strong>：使用 Vite 作为默认构建工具</li>
+<li><strong>Nitro 引擎</strong>：新的服务器引擎，提供更好的性能</li>
+<li><strong>更小的包体积</strong>：优化了依赖和构建产物</li>
+<li><strong>更灵活的路由系统</strong>：支持嵌套路由和动态路由</li>
+</ul>
+<h2 id="二、Nuxt-3-基础"><a href="#二、Nuxt-3-基础" class="headerlink" title="二、Nuxt 3 基础"></a>二、Nuxt 3 基础</h2><h3 id="1-安装与配置"><a href="#1-安装与配置" class="headerlink" title="1. 安装与配置"></a>1. 安装与配置</h3><h4 id="1-1-创建-Nuxt-3-项目"><a href="#1-1-创建-Nuxt-3-项目" class="headerlink" title="1.1 创建 Nuxt 3 项目"></a>1.1 创建 Nuxt 3 项目</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用 npx</span></span><br><span class="line">npx create-nuxt-app@latest my-nuxt3-app</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者使用 npm</span></span><br><span class="line">npm init nuxt-app@latest my-nuxt3-app</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者使用 yarn</span></span><br><span class="line">yarn create nuxt-app my-nuxt3-app</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-2-项目结构"><a href="#1-2-项目结构" class="headerlink" title="1.2 项目结构"></a>1.2 项目结构</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">my-nuxt3-app/</span><br><span class="line">├── .nuxt/          # 构建输出目录</span><br><span class="line">├── app/            # 应用目录（新的目录结构）</span><br><span class="line">│   ├── components/ # 组件目录</span><br><span class="line">│   ├── composables/ # 组合式函数目录</span><br><span class="line">│   ├── middleware/ # 中间件目录</span><br><span class="line">│   ├── pages/      # 页面目录（自动路由）</span><br><span class="line">│   ├── plugins/    # 插件目录</span><br><span class="line">│   ├── server/     # 服务器目录</span><br><span class="line">│   └── utils/      # 工具函数目录</span><br><span class="line">├── public/         # 静态资源目录</span><br><span class="line">├── nuxt.config.ts  # Nuxt 配置文件</span><br><span class="line">├── package.json    # 项目配置文件</span><br><span class="line">└── tsconfig.json   # TypeScript 配置文件</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-配置文件"><a href="#1-3-配置文件" class="headerlink" title="1.3 配置文件"></a>1.3 配置文件</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// nuxt.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineNuxtConfig</span>(&#123;</span><br><span class="line">  <span class="comment">// 应用配置</span></span><br><span class="line">  <span class="attr">app</span>: &#123;</span><br><span class="line">    <span class="attr">head</span>: &#123;</span><br><span class="line">      <span class="attr">title</span>: <span class="string">&#x27;My Nuxt 3 App&#x27;</span>,</span><br><span class="line">      <span class="attr">meta</span>: [</span><br><span class="line">        &#123; <span class="attr">charset</span>: <span class="string">&#x27;utf-8&#x27;</span> &#125;,</span><br><span class="line">        &#123; <span class="attr">name</span>: <span class="string">&#x27;viewport&#x27;</span>, <span class="attr">content</span>: <span class="string">&#x27;width=device-width, initial-scale=1&#x27;</span> &#125;,</span><br><span class="line">        &#123; <span class="attr">hid</span>: <span class="string">&#x27;description&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;description&#x27;</span>, <span class="attr">content</span>: <span class="string">&#x27;Nuxt 3 App&#x27;</span> &#125;</span><br><span class="line">      ],</span><br><span class="line">      <span class="attr">link</span>: [</span><br><span class="line">        &#123; <span class="attr">rel</span>: <span class="string">&#x27;icon&#x27;</span>, <span class="attr">type</span>: <span class="string">&#x27;image/x-icon&#x27;</span>, <span class="attr">href</span>: <span class="string">&#x27;/favicon.ico&#x27;</span> &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 模块配置</span></span><br><span class="line">  <span class="attr">modules</span>: [</span><br><span class="line">    <span class="comment">// 在这里添加模块</span></span><br><span class="line">  ],</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 构建配置</span></span><br><span class="line">  <span class="attr">build</span>: &#123;</span><br><span class="line">    <span class="comment">// 构建选项</span></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 运行时配置</span></span><br><span class="line">  <span class="attr">runtimeConfig</span>: &#123;</span><br><span class="line">    <span class="comment">// 服务器端配置</span></span><br><span class="line">    <span class="attr">apiSecret</span>: process.<span class="property">env</span>.<span class="property">API_SECRET</span>,</span><br><span class="line">    <span class="comment">// 客户端端配置</span></span><br><span class="line">    <span class="attr">public</span>: &#123;</span><br><span class="line">      <span class="attr">apiBase</span>: process.<span class="property">env</span>.<span class="property">API_BASE</span> || <span class="string">&#x27;/api&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-路由系统"><a href="#2-路由系统" class="headerlink" title="2. 路由系统"></a>2. 路由系统</h3><h4 id="2-1-基本路由"><a href="#2-1-基本路由" class="headerlink" title="2.1 基本路由"></a>2.1 基本路由</h4><p>Nuxt 3 使用基于文件系统的路由，在 <code>app/pages</code> 目录中创建的文件会自动生成路由。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">app/pages/</span><br><span class="line">├── index.vue         # 根路由 /</span><br><span class="line">├── about.vue         # /about</span><br><span class="line">└── blog/</span><br><span class="line">    ├── index.vue     # /blog</span><br><span class="line">    └── [id].vue      # /blog/:id</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-动态路由"><a href="#2-2-动态路由" class="headerlink" title="2.2 动态路由"></a>2.2 动态路由</h4><p>使用方括号 <code>[]</code> 创建动态路由参数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- app/pages/blog/[id].vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;Blog Post &#123;&#123; $route.params.id &#125;&#125;&lt;/h1&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">// 使用 useRoute 钩子获取路由参数</span><br><span class="line">const route = useRoute();</span><br><span class="line">const id = route.params.id;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-嵌套路由"><a href="#2-3-嵌套路由" class="headerlink" title="2.3 嵌套路由"></a>2.3 嵌套路由</h4><p>创建与目录同名的 <code>.vue</code> 文件作为父组件，目录中的其他文件作为子路由。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app/pages/</span><br><span class="line">├── blog.vue          # 父组件</span><br><span class="line">└── blog/</span><br><span class="line">    ├── index.vue     # /blog</span><br><span class="line">    └── [id].vue      # /blog/:id</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- app/pages/blog.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;Blog&lt;/h1&gt;</span><br><span class="line">    &lt;NuxtPage /&gt;&lt;!-- 渲染子路由 --&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-4-路由导航"><a href="#2-4-路由导航" class="headerlink" title="2.4 路由导航"></a>2.4 路由导航</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;!-- 使用 NuxtLink 组件 --&gt;</span><br><span class="line">    &lt;NuxtLink to=&quot;/&quot;&gt;Home&lt;/NuxtLink&gt;</span><br><span class="line">    &lt;NuxtLink to=&quot;/about&quot;&gt;About&lt;/NuxtLink&gt;</span><br><span class="line">    &lt;NuxtLink :to=&quot;&#123; path: &#x27;/blog&#x27;, query: &#123; page: 1 &#125; &#125;&quot;&gt;Blog&lt;/NuxtLink&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">// 使用 useRouter 钩子进行编程式导航</span><br><span class="line">const router = useRouter();</span><br><span class="line"></span><br><span class="line">const navigateToAbout = () =&gt; &#123;</span><br><span class="line">  router.push(&#x27;/about&#x27;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">const navigateToBlog = (id) =&gt; &#123;</span><br><span class="line">  router.push(`/blog/$&#123;id&#125;`);</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-组件系统"><a href="#3-组件系统" class="headerlink" title="3. 组件系统"></a>3. 组件系统</h3><h4 id="3-1-组件目录"><a href="#3-1-组件目录" class="headerlink" title="3.1 组件目录"></a>3.1 组件目录</h4><p>Nuxt 3 会自动导入 <code>app/components</code> 目录中的组件，无需手动导入。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app/components/</span><br><span class="line">├── Button.vue        # 自动导入</span><br><span class="line">├── Card.vue          # 自动导入</span><br><span class="line">└── layout/</span><br><span class="line">    └── Header.vue    # 自动导入为 LayoutHeader</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-组件使用"><a href="#3-2-组件使用" class="headerlink" title="3.2 组件使用"></a>3.2 组件使用</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;Button @click=&quot;handleClick&quot;&gt;Click Me&lt;/Button&gt;</span><br><span class="line">    &lt;Card title=&quot;Card Title&quot;&gt;</span><br><span class="line">      &lt;template #content&gt;</span><br><span class="line">        Card content</span><br><span class="line">      &lt;/template&gt;</span><br><span class="line">    &lt;/Card&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">const handleClick = () =&gt; &#123;</span><br><span class="line">  console.log(&#x27;Button clicked&#x27;);</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-布局组件"><a href="#3-3-布局组件" class="headerlink" title="3.3 布局组件"></a>3.3 布局组件</h4><p>创建 <code>app/components/layout</code> 目录存放布局组件，或使用 <code>app/layouts</code> 目录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- app/layouts/default.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;layout&quot;&gt;</span><br><span class="line">    &lt;Header /&gt;</span><br><span class="line">    &lt;main&gt;</span><br><span class="line">      &lt;slot /&gt;</span><br><span class="line">    &lt;/main&gt;</span><br><span class="line">    &lt;Footer /&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">// 布局组件</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在页面中使用布局：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- app/pages/index.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;Home Page&lt;/h1&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">// 使用默认布局</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 或者指定布局 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;Home Page&lt;/h1&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">definePageMeta(&#123;</span><br><span class="line">  layout: &#x27;custom&#x27;</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-状态管理"><a href="#4-状态管理" class="headerlink" title="4. 状态管理"></a>4. 状态管理</h3><p>Nuxt 3 内置了 Pinia 状态管理，无需额外安装。</p>
+<h4 id="4-1-创建-Store"><a href="#4-1-创建-Store" class="headerlink" title="4.1 创建 Store"></a>4.1 创建 Store</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app/stores/counter.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineStore &#125; <span class="keyword">from</span> <span class="string">&#x27;pinia&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useCounterStore = <span class="title function_">defineStore</span>(<span class="string">&#x27;counter&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">state</span>: <span class="function">() =&gt;</span> (&#123;</span><br><span class="line">    <span class="attr">count</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;Counter&#x27;</span></span><br><span class="line">  &#125;),</span><br><span class="line">  <span class="attr">getters</span>: &#123;</span><br><span class="line">    <span class="attr">doubleCount</span>: <span class="function">(<span class="params">state</span>) =&gt;</span> state.<span class="property">count</span> * <span class="number">2</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">actions</span>: &#123;</span><br><span class="line">    <span class="title function_">increment</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">count</span>++;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">decrement</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">count</span>--;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-2-使用-Store"><a href="#4-2-使用-Store" class="headerlink" title="4.2 使用 Store"></a>4.2 使用 Store</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;&#123;&#123; counterStore.name &#125;&#125;&lt;/h1&gt;</span><br><span class="line">    &lt;p&gt;Count: &#123;&#123; counterStore.count &#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;p&gt;Double Count: &#123;&#123; counterStore.doubleCount &#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;button @click=&quot;counterStore.increment&quot;&gt;Increment&lt;/button&gt;</span><br><span class="line">    &lt;button @click=&quot;counterStore.decrement&quot;&gt;Decrement&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; useCounterStore &#125; from &#x27;@/stores/counter&#x27;;</span><br><span class="line"></span><br><span class="line">const counterStore = useCounterStore();</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-中间件"><a href="#5-中间件" class="headerlink" title="5. 中间件"></a>5. 中间件</h3><p>中间件用于在页面渲染前执行逻辑，如身份验证、路由守卫等。</p>
+<h4 id="5-1-创建中间件"><a href="#5-1-创建中间件" class="headerlink" title="5.1 创建中间件"></a>5.1 创建中间件</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app/middleware/auth.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineNuxtRouteMiddleware</span>(<span class="function">(<span class="params">to, <span class="keyword">from</span></span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 检查用户是否登录</span></span><br><span class="line">  <span class="keyword">const</span> user = <span class="title function_">useUserStore</span>().<span class="property">user</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (!user) &#123;</span><br><span class="line">    <span class="comment">// 未登录，重定向到登录页</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">navigateTo</span>(<span class="string">&#x27;/login&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-2-使用中间件"><a href="#5-2-使用中间件" class="headerlink" title="5.2 使用中间件"></a>5.2 使用中间件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 在页面中使用 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;Protected Page&lt;/h1&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">definePageMeta(&#123;</span><br><span class="line">  middleware: &#x27;auth&#x27;</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 或者在路由中使用 --&gt;</span><br><span class="line">// app/router.options.ts</span><br><span class="line">export default defineNuxtRouterConfig(&#123;</span><br><span class="line">  routes: &#123;</span><br><span class="line">    &#x27;/dashboard&#x27;: &#123;</span><br><span class="line">      middleware: &#x27;auth&#x27;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、Nuxt-3-进阶"><a href="#三、Nuxt-3-进阶" class="headerlink" title="三、Nuxt 3 进阶"></a>三、Nuxt 3 进阶</h2><h3 id="1-服务器端渲染-SSR"><a href="#1-服务器端渲染-SSR" class="headerlink" title="1. 服务器端渲染 (SSR)"></a>1. 服务器端渲染 (SSR)</h3><h4 id="1-1-数据获取"><a href="#1-1-数据获取" class="headerlink" title="1.1 数据获取"></a>1.1 数据获取</h4><p>使用 <code>useAsyncData</code> 钩子在服务器端获取数据。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;Blog Posts&lt;/h1&gt;</span><br><span class="line">    &lt;div v-if=&quot;loading&quot;&gt;Loading...&lt;/div&gt;</span><br><span class="line">    &lt;div v-else-if=&quot;error&quot;&gt;&#123;&#123; error &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;ul v-else&gt;</span><br><span class="line">      &lt;li v-for=&quot;post in posts&quot; :key=&quot;post.id&quot;&gt;</span><br><span class="line">        &lt;NuxtLink :to=&quot;`/blog/$&#123;post.id&#125;`&quot;&gt;&#123;&#123; post.title &#125;&#125;&lt;/NuxtLink&gt;</span><br><span class="line">      &lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">const &#123; data: posts, loading, error &#125; = await useAsyncData(&#x27;posts&#x27;, () =&gt; &#123;</span><br><span class="line">  return $fetch(&#x27;/api/posts&#x27;);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-2-服务器端-API"><a href="#1-2-服务器端-API" class="headerlink" title="1.2 服务器端 API"></a>1.2 服务器端 API</h4><p>在 <code>app/server/api</code> 目录中创建 API 路由。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app/server/api/posts.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineEventHandler</span>(<span class="title function_">async</span> (event) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 获取查询参数</span></span><br><span class="line">  <span class="keyword">const</span> query = <span class="title function_">getQuery</span>(event);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 模拟数据库查询</span></span><br><span class="line">  <span class="keyword">const</span> posts = [</span><br><span class="line">    &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">title</span>: <span class="string">&#x27;Post 1&#x27;</span>, <span class="attr">content</span>: <span class="string">&#x27;Content 1&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">title</span>: <span class="string">&#x27;Post 2&#x27;</span>, <span class="attr">content</span>: <span class="string">&#x27;Content 2&#x27;</span> &#125;</span><br><span class="line">  ];</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> posts;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-静态站点生成-SSG"><a href="#2-静态站点生成-SSG" class="headerlink" title="2. 静态站点生成 (SSG)"></a>2. 静态站点生成 (SSG)</h3><h4 id="2-1-配置静态生成"><a href="#2-1-配置静态生成" class="headerlink" title="2.1 配置静态生成"></a>2.1 配置静态生成</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// nuxt.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineNuxtConfig</span>(&#123;</span><br><span class="line">  <span class="comment">// 配置为静态站点生成</span></span><br><span class="line">  <span class="attr">nitro</span>: &#123;</span><br><span class="line">    <span class="attr">prerender</span>: &#123;</span><br><span class="line">      <span class="attr">routes</span>: [<span class="string">&#x27;/&#x27;</span>, <span class="string">&#x27;/about&#x27;</span>, <span class="string">&#x27;/blog&#x27;</span>]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-生成静态站点"><a href="#2-2-生成静态站点" class="headerlink" title="2.2 生成静态站点"></a>2.2 生成静态站点</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 生成静态站点</span></span><br><span class="line">npm run generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 预览静态站点</span></span><br><span class="line">npm run preview</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-插件系统"><a href="#3-插件系统" class="headerlink" title="3. 插件系统"></a>3. 插件系统</h3><p>插件用于扩展 Nuxt 应用的功能，如集成第三方库、全局组件等。</p>
+<h4 id="3-1-创建插件"><a href="#3-1-创建插件" class="headerlink" title="3.1 创建插件"></a>3.1 创建插件</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app/plugins/axios.ts</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineNuxtPlugin</span>(<span class="function">(<span class="params">nuxtApp</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 创建 axios 实例</span></span><br><span class="line">  <span class="keyword">const</span> api = axios.<span class="title function_">create</span>(&#123;</span><br><span class="line">    <span class="attr">baseURL</span>: nuxtApp.<span class="property">$config</span>.<span class="property">public</span>.<span class="property">apiBase</span></span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 注入到全局</span></span><br><span class="line">  nuxtApp.<span class="title function_">provide</span>(<span class="string">&#x27;axios&#x27;</span>, api);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-使用插件"><a href="#3-2-使用插件" class="headerlink" title="3.2 使用插件"></a>3.2 使用插件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;Using Axios&lt;/h1&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">const &#123; $axios &#125; = useNuxtApp();</span><br><span class="line"></span><br><span class="line">// 使用注入的 axios</span><br><span class="line">const fetchData = async () =&gt; &#123;</span><br><span class="line">  const response = await $axios.get(&#x27;/posts&#x27;);</span><br><span class="line">  return response.data;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-组合式函数-Composables"><a href="#4-组合式函数-Composables" class="headerlink" title="4. 组合式函数 (Composables)"></a>4. 组合式函数 (Composables)</h3><p>组合式函数用于复用逻辑，类似于 Vue 3 的自定义 Hooks。</p>
+<h4 id="4-1-创建组合式函数"><a href="#4-1-创建组合式函数" class="headerlink" title="4.1 创建组合式函数"></a>4.1 创建组合式函数</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app/composables/useAuth.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; useUserStore &#125; <span class="keyword">from</span> <span class="string">&#x27;@/stores/user&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useAuth</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> userStore = <span class="title function_">useUserStore</span>();</span><br><span class="line">  <span class="keyword">const</span> router = <span class="title function_">useRouter</span>();</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">login</span> = <span class="keyword">async</span> (<span class="params">credentials</span>) =&gt; &#123;</span><br><span class="line">    <span class="comment">// 登录逻辑</span></span><br><span class="line">    <span class="keyword">const</span> user = <span class="keyword">await</span> $fetch(<span class="string">&#x27;/api/login&#x27;</span>, &#123;</span><br><span class="line">      <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">      <span class="attr">body</span>: credentials</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    userStore.<span class="title function_">setUser</span>(user);</span><br><span class="line">    router.<span class="title function_">push</span>(<span class="string">&#x27;/dashboard&#x27;</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">logout</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    userStore.<span class="title function_">clearUser</span>();</span><br><span class="line">    router.<span class="title function_">push</span>(<span class="string">&#x27;/login&#x27;</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> isAuthenticated = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> !!userStore.<span class="property">user</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    login,</span><br><span class="line">    logout,</span><br><span class="line">    isAuthenticated,</span><br><span class="line">    <span class="attr">user</span>: <span class="title function_">computed</span>(<span class="function">() =&gt;</span> userStore.<span class="property">user</span>)</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-2-使用组合式函数"><a href="#4-2-使用组合式函数" class="headerlink" title="4.2 使用组合式函数"></a>4.2 使用组合式函数</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div v-if=&quot;isAuthenticated&quot;&gt;</span><br><span class="line">      &lt;p&gt;Welcome, &#123;&#123; user.name &#125;&#125;&lt;/p&gt;</span><br><span class="line">      &lt;button @click=&quot;logout&quot;&gt;Logout&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div v-else&gt;</span><br><span class="line">      &lt;button @click=&quot;login(&#123; username: &#x27;admin&#x27;, password: &#x27;123456&#x27; &#125;)&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">const &#123; login, logout, isAuthenticated, user &#125; = useAuth();</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-国际化-i18n"><a href="#5-国际化-i18n" class="headerlink" title="5. 国际化 (i18n)"></a>5. 国际化 (i18n)</h3><p>使用 <code>@nuxtjs/i18n</code> 模块实现国际化。</p>
+<h4 id="5-1-安装模块"><a href="#5-1-安装模块" class="headerlink" title="5.1 安装模块"></a>5.1 安装模块</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @nuxtjs/i18n@next</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-2-配置模块"><a href="#5-2-配置模块" class="headerlink" title="5.2 配置模块"></a>5.2 配置模块</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// nuxt.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineNuxtConfig</span>(&#123;</span><br><span class="line">  <span class="attr">modules</span>: [</span><br><span class="line">    <span class="string">&#x27;@nuxtjs/i18n&#x27;</span></span><br><span class="line">  ],</span><br><span class="line">  </span><br><span class="line">  <span class="attr">i18n</span>: &#123;</span><br><span class="line">    <span class="attr">locales</span>: [</span><br><span class="line">      &#123; <span class="attr">code</span>: <span class="string">&#x27;en&#x27;</span>, <span class="attr">iso</span>: <span class="string">&#x27;en-US&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;English&#x27;</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">code</span>: <span class="string">&#x27;zh&#x27;</span>, <span class="attr">iso</span>: <span class="string">&#x27;zh-CN&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;中文&#x27;</span> &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">defaultLocale</span>: <span class="string">&#x27;en&#x27;</span>,</span><br><span class="line">    <span class="attr">vueI18n</span>: &#123;</span><br><span class="line">      <span class="attr">messages</span>: &#123;</span><br><span class="line">        <span class="attr">en</span>: &#123;</span><br><span class="line">          <span class="attr">welcome</span>: <span class="string">&#x27;Welcome to Nuxt 3&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">zh</span>: &#123;</span><br><span class="line">          <span class="attr">welcome</span>: <span class="string">&#x27;欢迎使用 Nuxt 3&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-3-使用国际化"><a href="#5-3-使用国际化" class="headerlink" title="5.3 使用国际化"></a>5.3 使用国际化</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;&#123;&#123; $t(&#x27;welcome&#x27;) &#125;&#125;&lt;/h1&gt;</span><br><span class="line">    &lt;button @click=&quot;switchLocale(&#x27;en&#x27;)&quot;&gt;English&lt;/button&gt;</span><br><span class="line">    &lt;button @click=&quot;switchLocale(&#x27;zh&#x27;)&quot;&gt;中文&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">const &#123; locale, switchLocalePath &#125; = useI18n();</span><br><span class="line"></span><br><span class="line">const switchLocale = (code) =&gt; &#123;</span><br><span class="line">  locale.value = code;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、Nuxt-3-实战"><a href="#四、Nuxt-3-实战" class="headerlink" title="四、Nuxt 3 实战"></a>四、Nuxt 3 实战</h2><h3 id="1-构建博客应用"><a href="#1-构建博客应用" class="headerlink" title="1. 构建博客应用"></a>1. 构建博客应用</h3><h4 id="1-1-项目结构"><a href="#1-1-项目结构" class="headerlink" title="1.1 项目结构"></a>1.1 项目结构</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">my-blog/</span><br><span class="line">├── app/</span><br><span class="line">│   ├── components/</span><br><span class="line">│   │   ├── layout/</span><br><span class="line">│   │   │   ├── Header.vue</span><br><span class="line">│   │   │   └── Footer.vue</span><br><span class="line">│   │   ├── BlogPost.vue</span><br><span class="line">│   │   └── Pagination.vue</span><br><span class="line">│   ├── composables/</span><br><span class="line">│   │   └── useBlog.ts</span><br><span class="line">│   ├── pages/</span><br><span class="line">│   │   ├── index.vue</span><br><span class="line">│   │   ├── blog.vue</span><br><span class="line">│   │   └── blog/</span><br><span class="line">│   │       ├── index.vue</span><br><span class="line">│   │       └── [slug].vue</span><br><span class="line">│   ├── server/</span><br><span class="line">│   │   └── api/</span><br><span class="line">│   │       └── posts.ts</span><br><span class="line">│   └── stores/</span><br><span class="line">│       └── blog.ts</span><br><span class="line">├── content/         # 内容目录</span><br><span class="line">│   └── blog/</span><br><span class="line">│       ├── post-1.md</span><br><span class="line">│       └── post-2.md</span><br><span class="line">├── public/</span><br><span class="line">│   └── images/</span><br><span class="line">└── nuxt.config.ts</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-2-内容管理"><a href="#1-2-内容管理" class="headerlink" title="1.2 内容管理"></a>1.2 内容管理</h4><p>使用 <code>@nuxt/content</code> 模块管理博客内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @nuxt/content</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// nuxt.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineNuxtConfig</span>(&#123;</span><br><span class="line">  <span class="attr">modules</span>: [</span><br><span class="line">    <span class="string">&#x27;@nuxt/content&#x27;</span></span><br><span class="line">  ]</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>创建 Markdown 内容文件：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: &#x27;First Post&#x27;</span><br><span class="line">description: &#x27;My first blog post&#x27;</span><br><span class="line">date: &#x27;2023-01-01&#x27;</span><br><span class="line"><span class="section">author: &#x27;John Doe&#x27;</span></span><br><span class="line"><span class="section">---</span></span><br><span class="line"></span><br><span class="line"><span class="section"># First Post</span></span><br><span class="line"></span><br><span class="line">This is my first blog post using Nuxt 3 and Nuxt Content.</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-页面实现"><a href="#1-3-页面实现" class="headerlink" title="1.3 页面实现"></a>1.3 页面实现</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- app/pages/blog/index.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;Blog&lt;/h1&gt;</span><br><span class="line">    &lt;div v-if=&quot;loading&quot;&gt;Loading...&lt;/div&gt;</span><br><span class="line">    &lt;div v-else-if=&quot;error&quot;&gt;&#123;&#123; error &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div v-else&gt;</span><br><span class="line">      &lt;BlogPost </span><br><span class="line">        v-for=&quot;post in posts&quot; </span><br><span class="line">        :key=&quot;post._path&quot; </span><br><span class="line">        :post=&quot;post&quot; </span><br><span class="line">      /&gt;</span><br><span class="line">      &lt;Pagination </span><br><span class="line">        :current-page=&quot;page&quot; </span><br><span class="line">        :total-pages=&quot;totalPages&quot; </span><br><span class="line">        @page-change=&quot;fetchPosts&quot;</span><br><span class="line">      /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">const route = useRoute();</span><br><span class="line">const page = Number(route.query.page || 1);</span><br><span class="line">const limit = 10;</span><br><span class="line"></span><br><span class="line">const &#123; data: posts, loading, error &#125; = await useAsyncData(&#x27;posts&#x27;, () =&gt; &#123;</span><br><span class="line">  return queryContent(&#x27;blog&#x27;)</span><br><span class="line">    .sort(&#123; date: -1 &#125;)</span><br><span class="line">    .skip((page - 1) * limit)</span><br><span class="line">    .limit(limit)</span><br><span class="line">    .find();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const &#123; data: count &#125; = await useAsyncData(&#x27;posts-count&#x27;, () =&gt; &#123;</span><br><span class="line">  return queryContent(&#x27;blog&#x27;).count();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const totalPages = Math.ceil(count.value / limit);</span><br><span class="line"></span><br><span class="line">const fetchPosts = (newPage) =&gt; &#123;</span><br><span class="line">  navigateTo(&#123; query: &#123; page: newPage &#125; &#125;);</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- app/pages/blog/[slug].vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div v-if=&quot;loading&quot;&gt;Loading...&lt;/div&gt;</span><br><span class="line">    &lt;div v-else-if=&quot;error&quot;&gt;&#123;&#123; error &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div v-else&gt;</span><br><span class="line">      &lt;h1&gt;&#123;&#123; post.title &#125;&#125;&lt;/h1&gt;</span><br><span class="line">      &lt;p&gt;&#123;&#123; post.date &#125;&#125;&lt;/p&gt;</span><br><span class="line">      &lt;p&gt;&#123;&#123; post.author &#125;&#125;&lt;/p&gt;</span><br><span class="line">      &lt;div v-html=&quot;post.body&quot; /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">const route = useRoute();</span><br><span class="line">const slug = route.params.slug;</span><br><span class="line"></span><br><span class="line">const &#123; data: post, loading, error &#125; = await useAsyncData(`post-$&#123;slug&#125;`, () =&gt; &#123;</span><br><span class="line">  return queryContent(&#x27;blog&#x27;).where(&#123; _path: `/blog/$&#123;slug&#125;` &#125;).findOne();</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-部署-Nuxt-3-应用"><a href="#2-部署-Nuxt-3-应用" class="headerlink" title="2. 部署 Nuxt 3 应用"></a>2. 部署 Nuxt 3 应用</h3><h4 id="2-1-部署到-Vercel"><a href="#2-1-部署到-Vercel" class="headerlink" title="2.1 部署到 Vercel"></a>2.1 部署到 Vercel</h4><ol>
+<li>推送代码到 GitHub 仓库</li>
+<li>登录 Vercel 并导入仓库</li>
+<li>配置构建命令：<code>npm run build</code></li>
+<li>配置输出目录：<code>.output/public</code></li>
+<li>点击部署</li>
+</ol>
+<h4 id="2-2-部署到-Netlify"><a href="#2-2-部署到-Netlify" class="headerlink" title="2.2 部署到 Netlify"></a>2.2 部署到 Netlify</h4><ol>
+<li>推送代码到 GitHub 仓库</li>
+<li>登录 Netlify 并导入仓库</li>
+<li>配置构建命令：<code>npm run generate</code></li>
+<li>配置发布目录：<code>dist</code></li>
+<li>点击部署</li>
+</ol>
+<h4 id="2-3-部署到服务器"><a href="#2-3-部署到服务器" class="headerlink" title="2.3 部署到服务器"></a>2.3 部署到服务器</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 构建应用</span></span><br><span class="line">npm run build</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制构建产物到服务器</span></span><br><span class="line">scp -r .output/* user@server:/path/to/app</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在服务器上启动应用</span></span><br><span class="line">node /path/to/app/server/index.mjs</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、Nuxt-3-最佳实践"><a href="#五、Nuxt-3-最佳实践" class="headerlink" title="五、Nuxt 3 最佳实践"></a>五、Nuxt 3 最佳实践</h2><h3 id="1-性能优化"><a href="#1-性能优化" class="headerlink" title="1. 性能优化"></a>1. 性能优化</h3><ul>
+<li><strong>使用静态站点生成</strong>：对于内容不频繁变化的页面，使用 SSG</li>
+<li><strong>代码分割</strong>：使用动态导入分割代码</li>
+<li><strong>图片优化</strong>：使用 <code>&lt;NuxtImg&gt;</code> 组件优化图片</li>
+<li><strong>缓存策略</strong>：配置合理的缓存策略</li>
+<li><strong>CDN 加速</strong>：使用 CDN 加速静态资源</li>
+</ul>
+<h3 id="2-代码组织"><a href="#2-代码组织" class="headerlink" title="2. 代码组织"></a>2. 代码组织</h3><ul>
+<li><strong>模块化</strong>：将功能拆分为模块</li>
+<li><strong>组件化</strong>：合理使用组件</li>
+<li><strong>组合式函数</strong>：复用逻辑</li>
+<li><strong>类型定义</strong>：使用 TypeScript 类型定义</li>
+</ul>
+<h3 id="3-开发体验"><a href="#3-开发体验" class="headerlink" title="3. 开发体验"></a>3. 开发体验</h3><ul>
+<li><strong>ESLint 和 Prettier</strong>：保持代码风格一致</li>
+<li><strong>Husky</strong>：使用 Git 钩子</li>
+<li><strong>Vitest</strong>：单元测试</li>
+<li><strong>Storybook</strong>：组件文档</li>
+</ul>
+<h3 id="4-安全性"><a href="#4-安全性" class="headerlink" title="4. 安全性"></a>4. 安全性</h3><ul>
+<li><strong>环境变量</strong>：使用环境变量存储敏感信息</li>
+<li><strong>CORS 配置</strong>：正确配置 CORS</li>
+<li><strong>输入验证</strong>：验证用户输入</li>
+<li><strong>HTTPS</strong>：使用 HTTPS</li>
+</ul>
+<h2 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h2><p>Nuxt 3 是一个功能强大的 Vue 3 全栈框架，提供了服务器端渲染、静态站点生成、路由管理、状态管理等功能，帮助开发者快速构建高性能的 Vue 应用。</p>
+<p>本文介绍了 Nuxt 3 的基础概念、安装配置、核心特性、高级用法和实战案例，希望能为你的 Nuxt 3 开发提供参考。在实际项目中，应根据具体需求选择合适的配置和优化策略，充分发挥 Nuxt 3 的优势。</p>
+<hr>
+<p><strong>更多资源</strong>：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://nuxt.com/docs">Nuxt 3 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/docs">Vue 3 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://pinia.vuejs.org/">Pinia 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://content.nuxtjs.org/">Nuxt Content 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/nuxt/starter">Nuxt 3 示例项目</a></li>
+</ul>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2026/01/15/Express%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E8%BF%9B%E9%98%B6/"
+      title="Express从基础到进阶"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        Express从基础到进阶
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2026/01/09/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E5%B7%A5%E5%85%B7/"
+      title="前端高频面试题解析：工程化与工具"
+     >
+
+    <p class="title-text">
+      
+        前端高频面试题解析：工程化与工具
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2026 mangguo<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+</body>
+</html>

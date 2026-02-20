@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+
+
+<html theme="dark" showBanner="true" hasBanner="true" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+
+  
+  <title>性能优化系列详解 | 个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="性能优化系列详解一、基础优化技巧回顾1. 资源加载优化 减少HTTP请求：合并CSS和JavaScript文件 使用CDN：加速静态资源加载 启用Gzip压缩：减小文件体积 浏览器缓存：合理设置缓存策略 图片优化：使用适当的格式和大小，懒加载  2. 代码优化 最小化代码：压缩CSS、JavaScript和HTML 消除无用代码：删除未使用的变量和函数 减少DOM操作：使用文档片段，批量更新 避免">
+<meta property="og:type" content="article">
+<meta property="og:title" content="性能优化系列详解">
+<meta property="og:url" content="https://mangguo68.github.io/2025/12/25/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%B3%BB%E5%88%97%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="个人博客">
+<meta property="og:description" content="性能优化系列详解一、基础优化技巧回顾1. 资源加载优化 减少HTTP请求：合并CSS和JavaScript文件 使用CDN：加速静态资源加载 启用Gzip压缩：减小文件体积 浏览器缓存：合理设置缓存策略 图片优化：使用适当的格式和大小，懒加载  2. 代码优化 最小化代码：压缩CSS、JavaScript和HTML 消除无用代码：删除未使用的变量和函数 减少DOM操作：使用文档片段，批量更新 避免">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-20T10:15:52.960Z">
+<meta property="article:author" content="mangguo">
+<meta property="article:tag" content="大数据列表">
+<meta property="article:tag" content="性能优化">
+<meta property="article:tag" content="移动端优化">
+<meta property="article:tag" content="首屏加载">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/images/1.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文档</a>
+    
+      <a class="main-nav-link" href="/about">关于</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文档</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/images/cdf58dc918fb56bfd0dacf18ec944465.webp></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">mangguo </div>
+      <div class="dot"></div>
+      <div class="subtitle">一名前端开发者 </div>
+      <div class="link-list">
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://twitter.com" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://store.steampowered.com" title="Steam"><i class="fa-brands fa-steam"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/mangguo68" title="GitHub"><i class="fa-brands fa-github"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+  <div class="sticky">
+    
+      
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/">
+                框架进阶
+                <div class="category-count">4</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Vue3/">
+                Vue3
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/React/">
+                React
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Nuxt/">
+                Nuxt
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6%E8%BF%9B%E9%98%B6/Nuxt/Vue/">
+                Vue
+                <div class="category-count">1</div>
+            </a>
+        </div></div></div></div>
+            <a class="category-link" href="/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/">
+                工程化
+                <div class="category-count">2</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/%E5%89%8D%E7%AB%AF%E6%9E%84%E5%BB%BA/">
+                前端构建
+                <div class="category-count">2</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+                性能优化
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6/">
+                前端进阶
+                <div class="category-count">1</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/">
+                面试技巧
+                <div class="category-count">5</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6/">
+                前端进阶
+                <div class="category-count">5</div>
+            </a>
+        </div></div>
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/">
+                后端开发
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Node-js/">
+                Node.js
+                <div class="category-count">1</div>
+            </a>
+        <div class="children"><div class="category-box">
+            <a class="category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Node-js/Express/">
+                Express
+                <div class="category-count">1</div>
+            </a>
+        </div></div></div></div></div>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/API%E5%BC%80%E5%8F%91/" rel="tag">API开发</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CI-CD/" rel="tag">CI&#x2F;CD</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Composition-API/" rel="tag">Composition API</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Core-Web-Vitals/" rel="tag">Core Web Vitals</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Express/" rel="tag">Express</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Hooks/" rel="tag">Hooks</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Nuxt3/" rel="tag">Nuxt3</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vite/" rel="tag">Vite</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Webpack/" rel="tag">Webpack</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/" rel="tag">前端开发实战</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">前端性能优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/" rel="tag">前端框架</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">前端模块化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/" rel="tag">后端框架</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%97%E8%A1%A8/" rel="tag">大数据列表</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%9E%84%E5%BB%BA%E4%BC%98%E5%8C%96/" rel="tag">构建优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" rel="tag">状态管理</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%BC%98%E5%8C%96/" rel="tag">移动端优化</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%B0%81%E8%A3%85/" rel="tag">组件封装</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91/" rel="tag">组件开发</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%87%AA%E5%AE%9A%E4%B9%89Hooks/" rel="tag">自定义Hooks</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">面试题</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E9%A6%96%E5%B1%8F%E5%8A%A0%E8%BD%BD/" rel="tag">首屏加载</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2026/02 ">
+          二月 2026 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2026/01 ">
+          一月 2026 
+          <div class="archive-count">7 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/12 ">
+          十二月 2025 
+          <div class="archive-count">4 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/11 ">
+          十一月 2025 
+          <div class="archive-count">2 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2026/02/18/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E6%88%98/" title="前端性能优化实战" >
+            <div class="recent-link-text">
+              前端性能优化实战
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/15/Express%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E8%BF%9B%E9%98%B6/" title="Express从基础到进阶" >
+            <div class="recent-link-text">
+              Express从基础到进阶
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/12/Nuxt3%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E8%BF%9B%E9%98%B6/" title="Nuxt3从基础到进阶" >
+            <div class="recent-link-text">
+              Nuxt3从基础到进阶
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/09/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E5%B7%A5%E5%85%B7/" title="前端高频面试题解析：工程化与工具" >
+            <div class="recent-link-text">
+              前端高频面试题解析：工程化与工具
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2026/01/07/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="前端高频面试题解析：性能优化" >
+            <div class="recent-link-text">
+              前端高频面试题解析：性能优化
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-性能优化系列详解" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        性能优化系列详解
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2025-12-24T16:00:00.000Z" itemprop="datePublished">2025-12-25</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>><a class="meta-cate-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6/">前端进阶</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            14k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%97%E8%A1%A8/" rel="tag">大数据列表</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%BC%98%E5%8C%96/" rel="tag">移动端优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A6%96%E5%B1%8F%E5%8A%A0%E8%BD%BD/" rel="tag">首屏加载</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="性能优化系列详解"><a href="#性能优化系列详解" class="headerlink" title="性能优化系列详解"></a>性能优化系列详解</h1><h2 id="一、基础优化技巧回顾"><a href="#一、基础优化技巧回顾" class="headerlink" title="一、基础优化技巧回顾"></a>一、基础优化技巧回顾</h2><h3 id="1-资源加载优化"><a href="#1-资源加载优化" class="headerlink" title="1. 资源加载优化"></a>1. 资源加载优化</h3><ul>
+<li><strong>减少HTTP请求</strong>：合并CSS和JavaScript文件</li>
+<li><strong>使用CDN</strong>：加速静态资源加载</li>
+<li><strong>启用Gzip压缩</strong>：减小文件体积</li>
+<li><strong>浏览器缓存</strong>：合理设置缓存策略</li>
+<li><strong>图片优化</strong>：使用适当的格式和大小，懒加载</li>
+</ul>
+<h3 id="2-代码优化"><a href="#2-代码优化" class="headerlink" title="2. 代码优化"></a>2. 代码优化</h3><ul>
+<li><strong>最小化代码</strong>：压缩CSS、JavaScript和HTML</li>
+<li><strong>消除无用代码</strong>：删除未使用的变量和函数</li>
+<li><strong>减少DOM操作</strong>：使用文档片段，批量更新</li>
+<li><strong>避免重排重绘</strong>：使用transform和opacity，离线更新DOM</li>
+<li><strong>使用事件委托</strong>：减少事件监听器数量</li>
+</ul>
+<h3 id="3-渲染优化"><a href="#3-渲染优化" class="headerlink" title="3. 渲染优化"></a>3. 渲染优化</h3><ul>
+<li><strong>关键渲染路径优化</strong>：内联关键CSS，延迟加载非关键资源</li>
+<li><strong>减少CSS选择器复杂度</strong>：使用更简单的选择器</li>
+<li><strong>避免CSS表达式</strong>：性能开销大</li>
+<li><strong>使用CSS动画</strong>：比JavaScript动画性能更好</li>
+<li><strong>优化字体加载</strong>：使用font-display属性</li>
+</ul>
+<h2 id="二、大数据列表优化"><a href="#二、大数据列表优化" class="headerlink" title="二、大数据列表优化"></a>二、大数据列表优化</h2><h3 id="1-虚拟滚动"><a href="#1-虚拟滚动" class="headerlink" title="1. 虚拟滚动"></a>1. 虚拟滚动</h3><p>虚拟滚动是一种只渲染可视区域内元素的技术，适用于处理大量数据的列表。</p>
+<h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><ol>
+<li>计算可视区域的高度</li>
+<li>计算每个列表项的高度</li>
+<li>计算可视区域内可以显示的列表项数量</li>
+<li>只渲染可视区域内的列表项</li>
+<li>当滚动时，动态更新渲染的列表项</li>
+</ol>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简单的虚拟滚动实现</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">VirtualList</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">container, options</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span> = container;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">options</span> = options;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">items</span> = options.<span class="property">items</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">itemHeight</span> = options.<span class="property">itemHeight</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">containerHeight</span> = container.<span class="property">clientHeight</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">visibleCount</span> = <span class="title class_">Math</span>.<span class="title function_">ceil</span>(<span class="variable language_">this</span>.<span class="property">containerHeight</span> / <span class="variable language_">this</span>.<span class="property">itemHeight</span>);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">bufferCount</span> = options.<span class="property">bufferCount</span> || <span class="number">2</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">totalHeight</span> = <span class="variable language_">this</span>.<span class="property">items</span>.<span class="property">length</span> * <span class="variable language_">this</span>.<span class="property">itemHeight</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span>.<span class="property">style</span>.<span class="property">position</span> = <span class="string">&#x27;relative&#x27;</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span>.<span class="property">style</span>.<span class="property">overflow</span> = <span class="string">&#x27;auto&#x27;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建占位元素</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">placeholder</span> = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">placeholder</span>.<span class="property">style</span>.<span class="property">height</span> = <span class="string">`<span class="subst">$&#123;<span class="variable language_">this</span>.totalHeight&#125;</span>px`</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span>.<span class="title function_">appendChild</span>(<span class="variable language_">this</span>.<span class="property">placeholder</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建内容容器</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">content</span> = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">content</span>.<span class="property">style</span>.<span class="property">position</span> = <span class="string">&#x27;absolute&#x27;</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">content</span>.<span class="property">style</span>.<span class="property">top</span> = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">content</span>.<span class="property">style</span>.<span class="property">left</span> = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">content</span>.<span class="property">style</span>.<span class="property">width</span> = <span class="string">&#x27;100%&#x27;</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span>.<span class="title function_">appendChild</span>(<span class="variable language_">this</span>.<span class="property">content</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 绑定滚动事件</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;scroll&#x27;</span>, <span class="variable language_">this</span>.<span class="property">handleScroll</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>));</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 初始渲染</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">render</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">handleScroll</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">render</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> scrollTop = <span class="variable language_">this</span>.<span class="property">container</span>.<span class="property">scrollTop</span>;</span><br><span class="line">    <span class="keyword">const</span> startIndex = <span class="title class_">Math</span>.<span class="title function_">floor</span>(scrollTop / <span class="variable language_">this</span>.<span class="property">itemHeight</span>) - <span class="variable language_">this</span>.<span class="property">bufferCount</span>;</span><br><span class="line">    <span class="keyword">const</span> endIndex = startIndex + <span class="variable language_">this</span>.<span class="property">visibleCount</span> + <span class="variable language_">this</span>.<span class="property">bufferCount</span> * <span class="number">2</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">const</span> visibleItems = <span class="variable language_">this</span>.<span class="property">items</span>.<span class="title function_">slice</span>(</span><br><span class="line">      <span class="title class_">Math</span>.<span class="title function_">max</span>(<span class="number">0</span>, startIndex),</span><br><span class="line">      <span class="title class_">Math</span>.<span class="title function_">min</span>(<span class="variable language_">this</span>.<span class="property">items</span>.<span class="property">length</span>, endIndex)</span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">const</span> offsetY = <span class="title class_">Math</span>.<span class="title function_">max</span>(<span class="number">0</span>, startIndex) * <span class="variable language_">this</span>.<span class="property">itemHeight</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">content</span>.<span class="property">style</span>.<span class="property">transform</span> = <span class="string">`translateY(<span class="subst">$&#123;offsetY&#125;</span>px)`</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">content</span>.<span class="property">innerHTML</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    visibleItems.<span class="title function_">forEach</span>(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> element = <span class="variable language_">this</span>.<span class="property">options</span>.<span class="title function_">renderItem</span>(item);</span><br><span class="line">      element.<span class="property">style</span>.<span class="property">height</span> = <span class="string">`<span class="subst">$&#123;<span class="variable language_">this</span>.itemHeight&#125;</span>px`</span>;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">content</span>.<span class="title function_">appendChild</span>(element);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">const</span> container = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;list-container&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> items = <span class="title class_">Array</span>.<span class="title function_">from</span>(&#123; <span class="attr">length</span>: <span class="number">10000</span> &#125;, <span class="function">(<span class="params">_, i</span>) =&gt;</span> (&#123; <span class="attr">id</span>: i, <span class="attr">text</span>: <span class="string">`Item <span class="subst">$&#123;i + <span class="number">1</span>&#125;</span>`</span> &#125;));</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">VirtualList</span>(container, &#123;</span><br><span class="line">  items,</span><br><span class="line">  <span class="attr">itemHeight</span>: <span class="number">50</span>,</span><br><span class="line">  <span class="attr">renderItem</span>: <span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> div = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line">    div.<span class="property">textContent</span> = item.<span class="property">text</span>;</span><br><span class="line">    div.<span class="property">style</span>.<span class="property">borderBottom</span> = <span class="string">&#x27;1px solid #eee&#x27;</span>;</span><br><span class="line">    div.<span class="property">style</span>.<span class="property">padding</span> = <span class="string">&#x27;15px&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> div;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="第三方库"><a href="#第三方库" class="headerlink" title="第三方库"></a>第三方库</h4><ul>
+<li><strong>react-window</strong>：React 专用的虚拟滚动库</li>
+<li><strong>vue-virtual-scroller</strong>：Vue 专用的虚拟滚动库</li>
+<li><strong>intersection-observer</strong>：基于 Intersection Observer API 的实现</li>
+</ul>
+<h3 id="2-分页加载"><a href="#2-分页加载" class="headerlink" title="2. 分页加载"></a>2. 分页加载</h3><p>分页加载是一种将数据分成多个页面，每次只加载一个页面数据的技术。</p>
+<h4 id="实现原理-1"><a href="#实现原理-1" class="headerlink" title="实现原理"></a>实现原理</h4><ol>
+<li>定义每页显示的数据量</li>
+<li>初始加载第一页数据</li>
+<li>当用户滚动到底部或点击”加载更多”按钮时，加载下一页数据</li>
+<li>将新数据追加到列表中</li>
+</ol>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 分页加载实现</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PaginationLoader</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">container, options</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span> = container;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">options</span> = options;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">page</span> = <span class="number">1</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">pageSize</span> = options.<span class="property">pageSize</span> || <span class="number">20</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">loading</span> = <span class="literal">false</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">hasMore</span> = <span class="literal">true</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 绑定滚动事件</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;scroll&#x27;</span>, <span class="variable language_">this</span>.<span class="property">handleScroll</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>));</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 初始加载</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">loadData</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">handleScroll</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; scrollTop, scrollHeight, clientHeight &#125; = <span class="variable language_">this</span>.<span class="property">container</span>;</span><br><span class="line">    <span class="keyword">if</span> (scrollTop + clientHeight &gt;= scrollHeight - <span class="number">100</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">loading</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">hasMore</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">loadData</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">async</span> <span class="title function_">loadData</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">loading</span> = <span class="literal">true</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 显示加载状态</span></span><br><span class="line">    <span class="keyword">const</span> loadingElement = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line">    loadingElement.<span class="property">className</span> = <span class="string">&#x27;loading&#x27;</span>;</span><br><span class="line">    loadingElement.<span class="property">textContent</span> = <span class="string">&#x27;加载中...&#x27;</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span>.<span class="title function_">appendChild</span>(loadingElement);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 模拟API请求</span></span><br><span class="line">      <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="property">options</span>.<span class="title function_">fetchData</span>(<span class="variable language_">this</span>.<span class="property">page</span>, <span class="variable language_">this</span>.<span class="property">pageSize</span>);</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">if</span> (data.<span class="property">length</span> &lt; <span class="variable language_">this</span>.<span class="property">pageSize</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">hasMore</span> = <span class="literal">false</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 渲染数据</span></span><br><span class="line">      data.<span class="title function_">forEach</span>(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> element = <span class="variable language_">this</span>.<span class="property">options</span>.<span class="title function_">renderItem</span>(item);</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">container</span>.<span class="title function_">appendChild</span>(element);</span><br><span class="line">      &#125;);</span><br><span class="line">      </span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">page</span>++;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;加载数据失败:&#x27;</span>, error);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">loading</span> = <span class="literal">false</span>;</span><br><span class="line">      <span class="comment">// 移除加载状态</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">container</span>.<span class="title function_">removeChild</span>(loadingElement);</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">hasMore</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> noMoreElement = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line">        noMoreElement.<span class="property">className</span> = <span class="string">&#x27;no-more&#x27;</span>;</span><br><span class="line">        noMoreElement.<span class="property">textContent</span> = <span class="string">&#x27;没有更多数据了&#x27;</span>;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">container</span>.<span class="title function_">appendChild</span>(noMoreElement);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">const</span> container = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;list-container&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">PaginationLoader</span>(container, &#123;</span><br><span class="line">  <span class="attr">pageSize</span>: <span class="number">20</span>,</span><br><span class="line">  <span class="attr">fetchData</span>: <span class="title function_">async</span> (page, pageSize) =&gt; &#123;</span><br><span class="line">    <span class="comment">// 模拟API请求</span></span><br><span class="line">    <span class="keyword">await</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> <span class="built_in">setTimeout</span>(resolve, <span class="number">1000</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Array</span>.<span class="title function_">from</span>(&#123; <span class="attr">length</span>: pageSize &#125;, <span class="function">(<span class="params">_, i</span>) =&gt;</span> (&#123;</span><br><span class="line">      <span class="attr">id</span>: (page - <span class="number">1</span>) * pageSize + i + <span class="number">1</span>,</span><br><span class="line">      <span class="attr">text</span>: <span class="string">`Item <span class="subst">$&#123;(page - <span class="number">1</span>) * pageSize + i + <span class="number">1</span>&#125;</span>`</span></span><br><span class="line">    &#125;));</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">renderItem</span>: <span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> div = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line">    div.<span class="property">textContent</span> = item.<span class="property">text</span>;</span><br><span class="line">    div.<span class="property">style</span>.<span class="property">borderBottom</span> = <span class="string">&#x27;1px solid #eee&#x27;</span>;</span><br><span class="line">    div.<span class="property">style</span>.<span class="property">padding</span> = <span class="string">&#x27;15px&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> div;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-数据缓存"><a href="#3-数据缓存" class="headerlink" title="3. 数据缓存"></a>3. 数据缓存</h3><p>数据缓存是一种将已加载的数据存储起来，避免重复请求的技术。</p>
+<h4 id="实现原理-2"><a href="#实现原理-2" class="headerlink" title="实现原理"></a>实现原理</h4><ol>
+<li>定义缓存策略（内存缓存、本地存储缓存等）</li>
+<li>当请求数据时，先检查缓存中是否存在</li>
+<li>如果存在，直接使用缓存数据</li>
+<li>如果不存在，请求数据并更新缓存</li>
+</ol>
+<h4 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数据缓存实现</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DataCache</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">options</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">cache</span> = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">expiry</span> = options.<span class="property">expiry</span> || <span class="number">5</span> * <span class="number">60</span> * <span class="number">1000</span>; <span class="comment">// 默认5分钟过期</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">set</span>(<span class="params">key, value</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> item = &#123;</span><br><span class="line">      value,</span><br><span class="line">      <span class="attr">expiry</span>: <span class="title class_">Date</span>.<span class="title function_">now</span>() + <span class="variable language_">this</span>.<span class="property">expiry</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">cache</span>.<span class="title function_">set</span>(key, item);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 可选：同时存储到localStorage</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="variable language_">localStorage</span>.<span class="title function_">setItem</span>(<span class="string">`cache_<span class="subst">$&#123;key&#125;</span>`</span>, <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(item));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;localStorage存储失败:&#x27;</span>, error);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">get</span>(<span class="params">key</span>) &#123;</span><br><span class="line">    <span class="comment">// 先检查内存缓存</span></span><br><span class="line">    <span class="keyword">let</span> item = <span class="variable language_">this</span>.<span class="property">cache</span>.<span class="title function_">get</span>(key);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果内存缓存中没有，检查localStorage</span></span><br><span class="line">    <span class="keyword">if</span> (!item) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> storedItem = <span class="variable language_">localStorage</span>.<span class="title function_">getItem</span>(<span class="string">`cache_<span class="subst">$&#123;key&#125;</span>`</span>);</span><br><span class="line">        <span class="keyword">if</span> (storedItem) &#123;</span><br><span class="line">          item = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(storedItem);</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">cache</span>.<span class="title function_">set</span>(key, item);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;localStorage读取失败:&#x27;</span>, error);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 检查是否过期</span></span><br><span class="line">    <span class="keyword">if</span> (item &amp;&amp; <span class="title class_">Date</span>.<span class="title function_">now</span>() &lt; item.<span class="property">expiry</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> item.<span class="property">value</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 过期则删除</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">cache</span>.<span class="title function_">delete</span>(key);</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="variable language_">localStorage</span>.<span class="title function_">removeItem</span>(<span class="string">`cache_<span class="subst">$&#123;key&#125;</span>`</span>);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;localStorage删除失败:&#x27;</span>, error);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">clear</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">cache</span>.<span class="title function_">clear</span>();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 清除所有缓存项</span></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="variable language_">localStorage</span>.<span class="property">length</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">const</span> key = <span class="variable language_">localStorage</span>.<span class="title function_">key</span>(i);</span><br><span class="line">        <span class="keyword">if</span> (key.<span class="title function_">startsWith</span>(<span class="string">&#x27;cache_&#x27;</span>)) &#123;</span><br><span class="line">          <span class="variable language_">localStorage</span>.<span class="title function_">removeItem</span>(key);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;localStorage清除失败:&#x27;</span>, error);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">const</span> cache = <span class="keyword">new</span> <span class="title class_">DataCache</span>(&#123; <span class="attr">expiry</span>: <span class="number">10</span> * <span class="number">60</span> * <span class="number">1000</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchData</span>(<span class="params">page</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> cacheKey = <span class="string">`data_page_<span class="subst">$&#123;page&#125;</span>`</span>;</span><br><span class="line">  <span class="keyword">const</span> cachedData = cache.<span class="title function_">get</span>(cacheKey);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (cachedData) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;使用缓存数据&#x27;</span>);</span><br><span class="line">    <span class="keyword">return</span> cachedData;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;请求新数据&#x27;</span>);</span><br><span class="line">  <span class="comment">// 模拟API请求</span></span><br><span class="line">  <span class="keyword">await</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> <span class="built_in">setTimeout</span>(resolve, <span class="number">1000</span>));</span><br><span class="line">  <span class="keyword">const</span> data = <span class="title class_">Array</span>.<span class="title function_">from</span>(&#123; <span class="attr">length</span>: <span class="number">20</span> &#125;, <span class="function">(<span class="params">_, i</span>) =&gt;</span> (&#123;</span><br><span class="line">    <span class="attr">id</span>: (page - <span class="number">1</span>) * <span class="number">20</span> + i + <span class="number">1</span>,</span><br><span class="line">    <span class="attr">text</span>: <span class="string">`Item <span class="subst">$&#123;(page - <span class="number">1</span>) * <span class="number">20</span> + i + <span class="number">1</span>&#125;</span>`</span></span><br><span class="line">  &#125;));</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 更新缓存</span></span><br><span class="line">  cache.<span class="title function_">set</span>(cacheKey, data);</span><br><span class="line">  <span class="keyword">return</span> data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、首屏加载极致优化"><a href="#三、首屏加载极致优化" class="headerlink" title="三、首屏加载极致优化"></a>三、首屏加载极致优化</h2><h3 id="1-资源优化"><a href="#1-资源优化" class="headerlink" title="1. 资源优化"></a>1. 资源优化</h3><h4 id="1-1-代码分割"><a href="#1-1-代码分割" class="headerlink" title="1.1 代码分割"></a>1.1 代码分割</h4><p>代码分割是一种将代码分成多个小块，按需加载的技术。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 路由懒加载</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">Home</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="string">&#x27;./views/Home.vue&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">About</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="string">&#x27;./views/About.vue&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 组件懒加载</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">HeavyComponent</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="string">&#x27;./components/HeavyComponent.vue&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第三方库懒加载</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">loadChart</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="string">&#x27;chart.js&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-2-预加载"><a href="#1-2-预加载" class="headerlink" title="1.2 预加载"></a>1.2 预加载</h4><p>预加载是一种在浏览器空闲时提前加载资源的技术。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 预加载关键资源 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preload&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/fonts/font.woff2&quot;</span> <span class="attr">as</span>=<span class="string">&quot;font&quot;</span> <span class="attr">type</span>=<span class="string">&quot;font/woff2&quot;</span> <span class="attr">crossorigin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preload&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/js/main.js&quot;</span> <span class="attr">as</span>=<span class="string">&quot;script&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preload&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/css/main.css&quot;</span> <span class="attr">as</span>=<span class="string">&quot;style&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 预连接 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preconnect&quot;</span> <span class="attr">href</span>=<span class="string">&quot;https://api.example.com&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;preconnect&quot;</span> <span class="attr">href</span>=<span class="string">&quot;https://cdn.example.com&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 预加载 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;prefetch&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/js/secondary.js&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;prerender&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/about&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-资源压缩"><a href="#1-3-资源压缩" class="headerlink" title="1.3 资源压缩"></a>1.3 资源压缩</h4><ul>
+<li><strong>JavaScript 压缩</strong>：使用 Terser 或 UglifyJS</li>
+<li><strong>CSS 压缩</strong>：使用 CleanCSS 或 CSSNano</li>
+<li><strong>HTML 压缩</strong>：使用 html-minifier</li>
+<li><strong>图片压缩</strong>：使用 imagemin 或在线工具</li>
+</ul>
+<h3 id="2-渲染优化"><a href="#2-渲染优化" class="headerlink" title="2. 渲染优化"></a>2. 渲染优化</h3><h4 id="2-1-关键渲染路径优化"><a href="#2-1-关键渲染路径优化" class="headerlink" title="2.1 关键渲染路径优化"></a>2.1 关键渲染路径优化</h4><p>关键渲染路径是指浏览器从接收HTML、CSS和JavaScript到渲染出页面的整个过程。</p>
+<ol>
+<li><strong>内联关键CSS</strong>：将首屏所需的CSS内联到HTML中</li>
+<li><strong>延迟加载非关键CSS</strong>：使用 <code>media</code> 属性或 JavaScript 动态加载</li>
+<li><strong>异步加载JavaScript</strong>：使用 <code>async</code> 或 <code>defer</code> 属性</li>
+<li><strong>减少DOM节点数量</strong>：简化HTML结构</li>
+<li><strong>优化CSS选择器</strong>：使用更简单的选择器</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh-CN&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>首屏优化示例<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 内联关键CSS --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">    <span class="comment">/* 首屏所需的CSS */</span></span></span><br><span class="line"><span class="language-css">    <span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">      <span class="attribute">font-family</span>: Arial, sans-serif;</span></span><br><span class="line"><span class="language-css">      <span class="attribute">margin</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">      <span class="attribute">padding</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css">    <span class="selector-class">.header</span> &#123;</span></span><br><span class="line"><span class="language-css">      <span class="attribute">background-color</span>: <span class="number">#333</span>;</span></span><br><span class="line"><span class="language-css">      <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">      <span class="attribute">padding</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css">    <span class="selector-class">.hero</span> &#123;</span></span><br><span class="line"><span class="language-css">      <span class="attribute">background-color</span>: <span class="number">#f5f5f5</span>;</span></span><br><span class="line"><span class="language-css">      <span class="attribute">padding</span>: <span class="number">40px</span>;</span></span><br><span class="line"><span class="language-css">      <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css">  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 延迟加载非关键CSS --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/css/non-critical.css&quot;</span> <span class="attr">media</span>=<span class="string">&quot;print&quot;</span> <span class="attr">onload</span>=<span class="string">&quot;this.media=&#x27;all&#x27;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">header</span> <span class="attr">class</span>=<span class="string">&quot;header&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>网站标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">section</span> <span class="attr">class</span>=<span class="string">&quot;hero&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>欢迎访问我们的网站<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是首屏内容<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 异步加载JavaScript --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">async</span> <span class="attr">src</span>=<span class="string">&quot;/js/main.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-服务端渲染-SSR"><a href="#2-2-服务端渲染-SSR" class="headerlink" title="2.2 服务端渲染 (SSR)"></a>2.2 服务端渲染 (SSR)</h4><p>服务端渲染是一种在服务器端生成HTML，然后发送给客户端的技术。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>更快的首屏加载速度</li>
+<li>更好的SEO</li>
+<li>支持无JavaScript环境</li>
+</ul>
+<p><strong>实现</strong>：</p>
+<ul>
+<li>React：Next.js</li>
+<li>Vue：Nuxt.js</li>
+<li>Angular：Angular Universal</li>
+</ul>
+<h4 id="2-3-静态站点生成-SSG"><a href="#2-3-静态站点生成-SSG" class="headerlink" title="2.3 静态站点生成 (SSG)"></a>2.3 静态站点生成 (SSG)</h4><p>静态站点生成是一种在构建时生成HTML，然后部署静态文件的技术。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>极致的首屏加载速度</li>
+<li>更好的安全性</li>
+<li>更低的服务器成本</li>
+</ul>
+<p><strong>实现</strong>：</p>
+<ul>
+<li>React：Next.js (SSG)</li>
+<li>Vue：Nuxt.js (SSG)</li>
+<li>独立工具：Gatsby、Hexo、Hugo</li>
+</ul>
+<h3 id="3-性能监控"><a href="#3-性能监控" class="headerlink" title="3. 性能监控"></a>3. 性能监控</h3><h4 id="3-1-核心Web指标"><a href="#3-1-核心Web指标" class="headerlink" title="3.1 核心Web指标"></a>3.1 核心Web指标</h4><ul>
+<li><strong>LCP (Largest Contentful Paint)</strong>：最大内容绘制，衡量首屏加载速度</li>
+<li><strong>FID (First Input Delay)</strong>：首次输入延迟，衡量交互性</li>
+<li><strong>CLS (Cumulative Layout Shift)</strong>：累积布局偏移，衡量视觉稳定性</li>
+<li><strong>TTI (Time to Interactive)</strong>：可交互时间，衡量页面何时完全可交互</li>
+</ul>
+<h4 id="3-2-监控工具"><a href="#3-2-监控工具" class="headerlink" title="3.2 监控工具"></a>3.2 监控工具</h4><ul>
+<li><strong>Google PageSpeed Insights</strong>：分析页面性能并提供建议</li>
+<li><strong>Lighthouse</strong>：开源的网站质量评估工具</li>
+<li><strong>WebPageTest</strong>：详细的性能测试工具</li>
+<li><strong>Chrome DevTools</strong>：浏览器内置的开发工具</li>
+<li><strong>New Relic</strong>：应用性能监控</li>
+<li><strong>Datadog</strong>：基础设施和应用监控</li>
+</ul>
+<h3 id="4-实战案例：首屏加载优化"><a href="#4-实战案例：首屏加载优化" class="headerlink" title="4. 实战案例：首屏加载优化"></a>4. 实战案例：首屏加载优化</h3><h4 id="4-1-分析性能瓶颈"><a href="#4-1-分析性能瓶颈" class="headerlink" title="4.1 分析性能瓶颈"></a>4.1 分析性能瓶颈</h4><p>使用 Chrome DevTools 的 Performance 面板分析页面加载过程，找出性能瓶颈。</p>
+<h4 id="4-2-优化策略"><a href="#4-2-优化策略" class="headerlink" title="4.2 优化策略"></a>4.2 优化策略</h4><ol>
+<li><p><strong>资源优化</strong>：</p>
+<ul>
+<li>压缩CSS和JavaScript</li>
+<li>优化图片</li>
+<li>使用CDN</li>
+<li>启用Gzip压缩</li>
+</ul>
+</li>
+<li><p><strong>渲染优化</strong>：</p>
+<ul>
+<li>内联关键CSS</li>
+<li>延迟加载非关键资源</li>
+<li>异步加载JavaScript</li>
+<li>减少DOM节点数量</li>
+</ul>
+</li>
+<li><p><strong>缓存策略</strong>：</p>
+<ul>
+<li>设置合理的缓存头</li>
+<li>使用Service Worker缓存静态资源</li>
+<li>实现离线访问</li>
+</ul>
+</li>
+<li><p><strong>构建优化</strong>：</p>
+<ul>
+<li>代码分割</li>
+<li>树摇（Tree Shaking）</li>
+<li>模块合并</li>
+</ul>
+</li>
+</ol>
+<h4 id="4-3-验证优化效果"><a href="#4-3-验证优化效果" class="headerlink" title="4.3 验证优化效果"></a>4.3 验证优化效果</h4><p>使用 Lighthouse 或 PageSpeed Insights 验证优化效果，确保核心Web指标达到良好水平。</p>
+<h2 id="四、移动端性能优化"><a href="#四、移动端性能优化" class="headerlink" title="四、移动端性能优化"></a>四、移动端性能优化</h2><h3 id="1-网络优化"><a href="#1-网络优化" class="headerlink" title="1. 网络优化"></a>1. 网络优化</h3><h4 id="1-1-减少数据传输"><a href="#1-1-减少数据传输" class="headerlink" title="1.1 减少数据传输"></a>1.1 减少数据传输</h4><ul>
+<li><strong>压缩数据</strong>：使用Gzip或Brotli压缩</li>
+<li><strong>最小化API响应</strong>：只返回必要的数据</li>
+<li><strong>使用HTTP&#x2F;2</strong>：支持多路复用</li>
+<li><strong>使用WebSocket</strong>：减少连接开销</li>
+</ul>
+<h4 id="1-2-缓存策略"><a href="#1-2-缓存策略" class="headerlink" title="1.2 缓存策略"></a>1.2 缓存策略</h4><ul>
+<li><strong>浏览器缓存</strong>：设置合理的Cache-Control头</li>
+<li><strong>Service Worker缓存</strong>：离线访问</li>
+<li><strong>本地存储</strong>：使用localStorage或IndexedDB存储数据</li>
+</ul>
+<h4 id="1-3-预加载策略"><a href="#1-3-预加载策略" class="headerlink" title="1.3 预加载策略"></a>1.3 预加载策略</h4><ul>
+<li><strong>预连接</strong>：提前建立连接</li>
+<li><strong>预加载</strong>：提前加载关键资源</li>
+<li><strong>预渲染</strong>：提前渲染可能访问的页面</li>
+</ul>
+<h3 id="2-渲染优化-1"><a href="#2-渲染优化-1" class="headerlink" title="2. 渲染优化"></a>2. 渲染优化</h3><h4 id="2-1-触摸优化"><a href="#2-1-触摸优化" class="headerlink" title="2.1 触摸优化"></a>2.1 触摸优化</h4><ul>
+<li><strong>使用触摸事件</strong>：替代鼠标事件</li>
+<li><strong>减少触摸延迟</strong>：使用 <code>touch-action</code> CSS属性</li>
+<li><strong>实现触摸反馈</strong>：提供视觉反馈</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 减少触摸延迟 */</span></span><br><span class="line"><span class="selector-tag">button</span> &#123;</span><br><span class="line">  <span class="attribute">touch-action</span>: manipulation;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 触摸反馈 */</span></span><br><span class="line"><span class="selector-class">.touch-feedback</span> &#123;</span><br><span class="line">  <span class="attribute">transition</span>: transform <span class="number">0.1s</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.touch-feedback</span><span class="selector-pseudo">:active</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">0.95</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-滚动优化"><a href="#2-2-滚动优化" class="headerlink" title="2.2 滚动优化"></a>2.2 滚动优化</h4><ul>
+<li><strong>使用CSS滚动</strong>：比JavaScript滚动性能更好</li>
+<li><strong>避免滚动时的重排</strong>：固定定位元素</li>
+<li><strong>使用 <code>will-change</code></strong>：提示浏览器优化</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 提示浏览器优化 */</span></span><br><span class="line"><span class="selector-class">.scroll-container</span> &#123;</span><br><span class="line">  <span class="attribute">will-change</span>: transform;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 固定定位元素 */</span></span><br><span class="line"><span class="selector-class">.header</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: fixed;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">z-index</span>: <span class="number">100</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-动画优化"><a href="#2-3-动画优化" class="headerlink" title="2.3 动画优化"></a>2.3 动画优化</h4><ul>
+<li><strong>使用CSS动画</strong>：比JavaScript动画性能更好</li>
+<li><strong>使用transform和opacity</strong>：不会触发重排</li>
+<li><strong>避免频繁动画</strong>：减少CPU开销</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 高性能动画 */</span></span><br><span class="line"><span class="keyword">@keyframes</span> slide-in &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateX</span>(-<span class="number">100%</span>);</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">to</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateX</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.animated-element</span> &#123;</span><br><span class="line">  <span class="attribute">animation</span>: slide-in <span class="number">0.3s</span> ease-out;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-资源优化"><a href="#3-资源优化" class="headerlink" title="3. 资源优化"></a>3. 资源优化</h3><h4 id="3-1-图片优化"><a href="#3-1-图片优化" class="headerlink" title="3.1 图片优化"></a>3.1 图片优化</h4><ul>
+<li><strong>使用适当的格式</strong>：WebP、AVIF</li>
+<li><strong>响应式图片</strong>：使用 <code>srcset</code> 和 <code>sizes</code> 属性</li>
+<li><strong>懒加载</strong>：只加载可视区域内的图片</li>
+<li><strong>使用SVG</strong>：适用于图标和简单图形</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 响应式图片 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> </span></span><br><span class="line"><span class="tag">  <span class="attr">srcset</span>=<span class="string">&quot;small.jpg 480w, medium.jpg 768w, large.jpg 1200w&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">sizes</span>=<span class="string">&quot;(max-width: 600px) 480px, (max-width: 992px) 768px, 1200px&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">src</span>=<span class="string">&quot;fallback.jpg&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">alt</span>=<span class="string">&quot;描述&quot;</span></span></span><br><span class="line"><span class="tag">&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 懒加载 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;placeholder.jpg&quot;</span> <span class="attr">data-src</span>=<span class="string">&quot;real-image.jpg&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;描述&quot;</span> <span class="attr">class</span>=<span class="string">&quot;lazy&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;DOMContentLoaded&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> lazyImages = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.lazy&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">    </span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">if</span> (<span class="string">&#x27;IntersectionObserver&#x27;</span> <span class="keyword">in</span> <span class="variable language_">window</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">const</span> imageObserver = <span class="keyword">new</span> <span class="title class_">IntersectionObserver</span>(<span class="keyword">function</span>(<span class="params">entries, observer</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        entries.<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">entry</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">          <span class="keyword">if</span> (entry.<span class="property">isIntersecting</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> image = entry.<span class="property">target</span>;</span></span><br><span class="line"><span class="language-javascript">            image.<span class="property">src</span> = image.<span class="property">dataset</span>.<span class="property">src</span>;</span></span><br><span class="line"><span class="language-javascript">            image.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;lazy&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">            imageObserver.<span class="title function_">unobserve</span>(image);</span></span><br><span class="line"><span class="language-javascript">          &#125;</span></span><br><span class="line"><span class="language-javascript">        &#125;);</span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">      </span></span><br><span class="line"><span class="language-javascript">      lazyImages.<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">image</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        imageObserver.<span class="title function_">observe</span>(image);</span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-字体优化"><a href="#3-2-字体优化" class="headerlink" title="3.2 字体优化"></a>3.2 字体优化</h4><ul>
+<li><strong>使用系统字体</strong>：减少加载时间</li>
+<li><strong>字体子集</strong>：只包含必要的字符</li>
+<li><strong>字体预加载</strong>：提前加载关键字体</li>
+<li><strong>使用 <code>font-display</code></strong>：控制字体加载行为</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 使用系统字体 */</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: -apple-system, BlinkMacSystemFont, <span class="string">&#x27;Segoe UI&#x27;</span>, Roboto, Oxygen, Ubuntu, Cantarell, <span class="string">&#x27;Open Sans&#x27;</span>, <span class="string">&#x27;Helvetica Neue&#x27;</span>, sans-serif;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 字体预加载 */</span></span><br><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&#x27;MyFont&#x27;</span>;</span><br><span class="line">  <span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">&#x27;myfont.woff2&#x27;</span>) <span class="built_in">format</span>(<span class="string">&#x27;woff2&#x27;</span>);</span><br><span class="line">  <span class="attribute">font-display</span>: swap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-代码优化"><a href="#3-3-代码优化" class="headerlink" title="3.3 代码优化"></a>3.3 代码优化</h4><ul>
+<li><strong>最小化代码</strong>：压缩CSS和JavaScript</li>
+<li><strong>移除未使用的代码</strong>：树摇</li>
+<li><strong>使用ES6+特性</strong>：更简洁的语法</li>
+<li><strong>避免使用大型库</strong>：考虑轻量级替代方案</li>
+</ul>
+<h3 id="4-电池优化"><a href="#4-电池优化" class="headerlink" title="4. 电池优化"></a>4. 电池优化</h3><ul>
+<li><strong>减少后台活动</strong>：避免不必要的定时器</li>
+<li><strong>优化定位使用</strong>：只在需要时使用GPS</li>
+<li><strong>减少网络请求</strong>：合并请求，使用缓存</li>
+<li><strong>优化动画</strong>：减少CPU和GPU使用</li>
+</ul>
+<h3 id="5-实战案例：移动端性能优化"><a href="#5-实战案例：移动端性能优化" class="headerlink" title="5. 实战案例：移动端性能优化"></a>5. 实战案例：移动端性能优化</h3><h4 id="5-1-分析性能瓶颈"><a href="#5-1-分析性能瓶颈" class="headerlink" title="5.1 分析性能瓶颈"></a>5.1 分析性能瓶颈</h4><p>使用 Chrome DevTools 的 Performance 面板或 Lighthouse 分析移动端性能。</p>
+<h4 id="5-2-优化策略"><a href="#5-2-优化策略" class="headerlink" title="5.2 优化策略"></a>5.2 优化策略</h4><ol>
+<li><p><strong>网络优化</strong>：</p>
+<ul>
+<li>使用CDN</li>
+<li>启用Gzip压缩</li>
+<li>实现缓存策略</li>
+</ul>
+</li>
+<li><p><strong>渲染优化</strong>：</p>
+<ul>
+<li>触摸优化</li>
+<li>滚动优化</li>
+<li>动画优化</li>
+</ul>
+</li>
+<li><p><strong>资源优化</strong>：</p>
+<ul>
+<li>图片优化</li>
+<li>字体优化</li>
+<li>代码优化</li>
+</ul>
+</li>
+<li><p><strong>电池优化</strong>：</p>
+<ul>
+<li>减少后台活动</li>
+<li>优化定位使用</li>
+</ul>
+</li>
+</ol>
+<h4 id="5-3-验证优化效果"><a href="#5-3-验证优化效果" class="headerlink" title="5.3 验证优化效果"></a>5.3 验证优化效果</h4><p>使用 Lighthouse 的移动端模式验证优化效果，确保在移动设备上有良好的性能表现。</p>
+<h2 id="五、性能优化工具链"><a href="#五、性能优化工具链" class="headerlink" title="五、性能优化工具链"></a>五、性能优化工具链</h2><h3 id="1-构建工具"><a href="#1-构建工具" class="headerlink" title="1. 构建工具"></a>1. 构建工具</h3><ul>
+<li><strong>Vite</strong>：快速的前端构建工具</li>
+<li><strong>Webpack</strong>：功能强大的模块打包工具</li>
+<li><strong>Rollup</strong>：高效的ES模块打包工具</li>
+<li><strong>Parcel</strong>：零配置的打包工具</li>
+</ul>
+<h3 id="2-分析工具"><a href="#2-分析工具" class="headerlink" title="2. 分析工具"></a>2. 分析工具</h3><ul>
+<li><strong>Webpack Bundle Analyzer</strong>：分析打包文件大小</li>
+<li><strong>Source Map Explorer</strong>：分析源代码映射</li>
+<li><strong>Google PageSpeed Insights</strong>：在线性能分析</li>
+<li><strong>Lighthouse</strong>：开源的网站质量评估工具</li>
+<li><strong>WebPageTest</strong>：详细的性能测试工具</li>
+</ul>
+<h3 id="3-监控工具"><a href="#3-监控工具" class="headerlink" title="3. 监控工具"></a>3. 监控工具</h3><ul>
+<li><strong>Sentry</strong>：错误监控</li>
+<li><strong>New Relic</strong>：应用性能监控</li>
+<li><strong>Datadog</strong>：基础设施和应用监控</li>
+<li><strong>Google Analytics</strong>：用户行为分析</li>
+<li><strong>Clarity</strong>：用户体验分析</li>
+</ul>
+<h3 id="4-自动化工具"><a href="#4-自动化工具" class="headerlink" title="4. 自动化工具"></a>4. 自动化工具</h3><ul>
+<li><strong>ESLint</strong>：代码质量检查</li>
+<li><strong>Prettier</strong>：代码格式化</li>
+<li><strong>Husky</strong>：Git钩子</li>
+<li><strong>Lint-Staged</strong>：暂存文件检查</li>
+<li><strong>CI&#x2F;CD</strong>：持续集成&#x2F;持续部署</li>
+</ul>
+<h2 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h2><p>性能优化是一个持续的过程，需要根据具体的应用场景和用户需求进行调整。本文介绍了性能优化的基础技巧，以及大数据列表优化、首屏加载极致优化和移动端性能优化等细分场景的优化策略。</p>
+<p>在实际项目中，应首先使用性能分析工具找出瓶颈，然后有针对性地进行优化。同时，建立性能监控机制，持续跟踪性能指标，确保优化效果的持久性。</p>
+<p>通过合理的性能优化，可以显著提升用户体验，提高网站的转化率和留存率。在竞争激烈的互联网时代，性能优化已经成为前端开发的核心竞争力之一。</p>
+<hr>
+<p><strong>更多资源：</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals">Google Web Fundamentals</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/Performance">MDN Web Performance</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/">Web.dev</a></li>
+<li><a target="_blank" rel="noopener" href="https://calendar.perfplanet.com/">Performance.now()</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.smashingmagazine.com/category/performance/">Smashing Magazine Performance</a></li>
+</ul>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2026/01/01/%E5%89%8D%E7%AB%AF%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%E8%A7%A3%E6%9E%90%EF%BC%9AJavaScript%E5%9F%BA%E7%A1%80/"
+      title="前端高频面试题解析：JavaScript基础"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        前端高频面试题解析：JavaScript基础
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2025/12/20/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96%E7%B3%BB%E5%88%97%E8%AF%A6%E8%A7%A3/"
+      title="前端工程化系列详解"
+     >
+
+    <p class="title-text">
+      
+        前端工程化系列详解
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2026 mangguo<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+</body>
+</html>
